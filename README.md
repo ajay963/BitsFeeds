@@ -2,6 +2,7 @@
 an Application using firebase service to shows local feeds , news , events occurs
 almost all the assets file are build from scratch and animation is from rive 1 (Flare)
 ## Getting Started
+<img src="assets/png/feeds.png" height=300 width=300>
 
 This project is a starting point for a Flutter application.
 

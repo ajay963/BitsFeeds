@@ -1,7 +1,6 @@
 # bits_news
-
-news application for the local news through custom api
-
+an Application using firebase service to shows local feeds , news , events occurs
+almost all the assets file are build from scratch and animation is from rive 1 (Flare)
 ## Getting Started
 
 This project is a starting point for a Flutter application.

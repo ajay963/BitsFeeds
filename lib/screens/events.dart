@@ -63,15 +63,21 @@ class _CalenderState extends State<Calender> {
       height: MediaQuery.of(context).size.height * 0.5,
       width: MediaQuery.of(context).size.width - 40,
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+        gradient: LinearGradient(
+            colors: [korgShade1, korgShade2],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-              color: Color(0x30000000), offset: Offset(0, 0), blurRadius: 16)
+              color: Color(0x50FFB396), offset: Offset(0, 0), blurRadius: 20)
         ],
       ),
-      child:
-          Center(child: TableCalendar(calendarController: _calendarController)),
+      child: Center(
+          child: TableCalendar(
+        calendarController: _calendarController,
+        calendarStyle: CalendarStyle(selectedColor: korgShade3),
+      )),
     );
   }
 }

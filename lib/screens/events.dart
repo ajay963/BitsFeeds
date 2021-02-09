@@ -1,83 +1,41 @@
 import 'package:bits_news/component/constants.dart';
-import 'package:bits_news/modals/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class EventPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final styles = Provider.of<CustomStyles>(context);
     final ScrollController _scrollController = ScrollController();
     return SafeArea(
       child: SingleChildScrollView(
           // physics: ScrollPhysics(parent: ),
           controller: _scrollController,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image(
-                        height: styles.imageSize,
-                        width: styles.imageSize,
-                        image: AssetImage('assets/png/event.png')),
-                    Text('Event',
-                        style: TextStyle(fontSize: 42, color: korgShade3)),
-                    SizedBox(width: 50)
+              SizedBox(height: 30),
+              Padding(
+                padding: EdgeInsets.only(left: 40),
+                child: RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: 'Events\n',
+                        style: TextStyle(
+                            fontSize: 48,
+                            fontWeight: FontWeight.w400,
+                            color: kPkThemeShade1)),
+                    TextSpan(
+                        text: 'Track all the events',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: kBlackLessDark,
+                            fontWeight: FontWeight.bold))
                   ]),
-              Calender(),
+                ),
+              ),
+              SizedBox(height: 20),
             ],
           )),
-    );
-  }
-}
-
-class Calender extends StatefulWidget {
-  @override
-  _CalenderState createState() => _CalenderState();
-}
-
-class _CalenderState extends State<Calender> {
-  CalendarController _calendarController;
-
-  _CalenderState();
-  @override
-  void initState() {
-    super.initState();
-    _calendarController = CalendarController();
-  }
-
-  @override
-  void dispose() {
-    _calendarController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
-      width: MediaQuery.of(context).size.width - 40,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-            colors: [korgShade1, korgShade2],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-              color: Color(0x50FFB396), offset: Offset(0, 0), blurRadius: 20)
-        ],
-      ),
-      child: Center(
-          child: TableCalendar(
-        calendarController: _calendarController,
-        calendarStyle: CalendarStyle(selectedColor: korgShade3),
-      )),
     );
   }
 }

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "960742807974",
+    "project_id": "bitsfeeds-fbb1d",
+    "storage_bucket": "bitsfeeds-fbb1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960742807974:android:924e40d128cd1864969767",
+        "android_client_info": {
+          "package_name": "ajay.com.bits_news"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "960742807974-f11q2qej19hcngks05h7gc4bu92nknjh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ajay.com.bits_news",
+            "certificate_hash": "26510cdea60291d8a47161fafe9d3b6b9ed53720"
+          }
+        },
+        {
+          "client_id": "960742807974-opkafnoc58t96v7pe800o2belnrb1dvq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCy1q7zEx-urpRO88jAkLO49hqRYA7HBu8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "960742807974-opkafnoc58t96v7pe800o2belnrb1dvq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

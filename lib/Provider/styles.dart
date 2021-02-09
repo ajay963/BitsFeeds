@@ -1,7 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class CustomStyles with ChangeNotifier {
-  double imageSize = 76;
+class Styles with ChangeNotifier {
+  double imageSize = 70;
+  bool isActionButton = false;
+  setActionButtonState({bool getState}) {
+    isActionButton = getState;
+    notifyListeners();
+  }
+
+  setActionByIdType({User userid}) {}
 
   final InputDecoration inputFieldDecoration = InputDecoration(
     labelText: 'E-mail',

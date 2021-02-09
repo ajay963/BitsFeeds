@@ -1,110 +1,204 @@
+import 'dart:ui';
+
+import 'package:bits_news/Provider/styles.dart';
+import 'package:bits_news/screens/signUp.dart';
+import 'package:bits_news/widgets/glassMorphism.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:bits_news/Provider/authServices.dart';
 import 'package:bits_news/component/constants.dart';
-import 'package:bits_news/screens/homeScreen.dart';
-import 'package:bits_news/widgets/formUi.dart';
+import 'package:bits_news/widgets/textField.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return InputFormUI(
-      child: SomeThings(),
+    return Stack(children: [
+      Image(
+        image: AssetImage('assets/png/space01.jpg'),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        fit: BoxFit.cover,
+      ),
+      ScrollConfiguration(
+        behavior: ScrollBehavior(),
+        child: GlowingOverscrollIndicator(
+            axisDirection: AxisDirection.down,
+            color: Colors.orange,
+            child: SingleChildScrollView(child: SomeThings())),
+      ),
+    ]);
+  }
+}
+
+class SomeThings extends StatefulWidget {
+  @override
+  _SomeThingsState createState() => _SomeThingsState();
+}
+
+class _SomeThingsState extends State<SomeThings> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    final stylesAndControl = Provider.of<Styles>(context);
+    return Container(
+      margin: EdgeInsets.only(
+          top: MediaQuery.of(context).size.height * 0.3, left: 20, right: 20),
+      child: GlassCard(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Sign In',
+              style: TextStyle(
+                  fontSize: 42,
+                  color: Colors.white.withOpacity(0.8),
+                  fontWeight: FontWeight.bold)),
+          Container(
+              margin: EdgeInsets.only(top: 20, right: 40),
+              child: UnderLinedTextField(
+                fieldName: 'E-mail',
+                keyboardType: TextInputType.emailAddress,
+                controller: emailController,
+              )),
+          Container(
+            margin: EdgeInsets.only(top: 20, right: 40),
+            child: UnderLinedTextField(
+              fieldName: 'Password',
+              keyboardType: TextInputType.visiblePassword,
+              controller: passwordController,
+              obscureText: true,
+            ),
+          ),
+          SizedBox(height: 20),
+          FlatGradientButton(
+            ontap: () {},
+            //  async {
+            // String mssg = await context.read<AuthenticationProvider>().signIn(
+            //     email: emailController.text.trim(),
+            //     password: passwordController.text.trim());
+            // stylesAndControl.setActionButtonState(getState: true);
+            // if (mssg != "True") {
+            //   await showDialog(
+            //       context: context,
+            //       builder: (BuildContext context) {
+            //         return MssgDialog(
+            //             title: 'Failed', mssg: mssg, context: context);
+            //       });
+            // }
+            //  },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  FontAwesomeIcons.signInAlt,
+                  color: Colors.white,
+                ),
+                Text("Sign In",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold))
+              ],
+            ),
+          ),
+          FlatGlassButton(
+            ontap: () async {
+              String mssg;
+              mssg =
+                  await context.read<AuthenticationProvider>().googleSignIn();
+              stylesAndControl.setActionButtonState(getState: false);
+              if (mssg != "True") {
+                await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return MssgDialog(
+                          title: 'Failed', mssg: mssg, context: context);
+                    });
+              }
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  FontAwesomeIcons.google,
+                  color: Colors.white,
+                ),
+                Text("Sign In",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold))
+              ],
+            ),
+          ),
+          FlatGlassButton(
+            ontap: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SignUpPage())),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  FontAwesomeIcons.addressBook,
+                  color: Colors.white,
+                ),
+                Text("Sign Up",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold))
+              ],
+            ),
+          )
+        ],
+      )),
     );
   }
 }
 
-class SomeThings extends StatelessWidget {
+class MssgDialog extends StatelessWidget {
+  final String title;
+  final String mssg;
+  final BuildContext context;
+  MssgDialog(
+      {@required this.title, @required this.mssg, @required this.context});
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.only(left: 40, right: 40),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Sign In', style: TextStyle(fontSize: 42)),
-            Container(
-              margin: EdgeInsets.only(top: 40, right: 40),
-              child: TextField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'E-mail',
-                  labelStyle: TextStyle(
-                      fontSize: 24,
-                      color: Color(0xff666666),
-                      fontWeight: FontWeight.bold),
-
-                  //prefixIcon: Icon(Icons.email_rounded),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 3,
-                        color: Color(0xffCCCCCC),
-                        style: BorderStyle.solid),
-                  ),
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      child: AlertDialog(
+        backgroundColor: Colors.white.withOpacity(0.3),
+        title: Text(
+          title,
+          style: TextStyle(
+              color: korgShade4, fontSize: 28, fontWeight: FontWeight.bold),
+        ),
+        content: Text(mssg,
+            style:
+                TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 20)),
+        actions: [
+          FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              color: Colors.white.withOpacity(0.2),
+              onPressed: () => Navigator.pop(context),
+              child: Container(
+                padding: EdgeInsets.all(5),
+                child: Text(
+                  'Got It !',
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.8), fontSize: 22),
                 ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 30, right: 40),
-              child: TextField(
-                keyboardType: TextInputType.visiblePassword,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  labelStyle: TextStyle(
-                      fontSize: 24,
-                      color: Color(0xff666666),
-                      fontWeight: FontWeight.bold),
-
-                  //prefixIcon: Icon(Icons.email_rounded),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 3,
-                        color: Color(0xffCCCCCC),
-                        style: BorderStyle.solid),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 30),
-              child: Text(
-                'Forgot Password',
-                style: TextStyle(fontSize: 18, color: korgShade4),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Home()));
-              },
-              child: Center(
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 60),
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: LinearGradient(
-                          colors: [korgShade2, korgShade3],
-                          begin: Alignment.topLeft,
-                          end: Alignment.topRight),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Color(0xaaFFB396),
-                            offset: Offset(0, 0),
-                            blurRadius: 20)
-                      ]),
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[50]),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ));
+              ))
+        ],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
   }
 }

@@ -37,7 +37,16 @@ dependencies:
   flare_flutter: ^2.0.6
   font_awesome_flutter: ^8.10.0
   table_calendar: ^2.3.3
+  image_picker: ^0.6.7+21
 
+  # firebase pulgin only
+  firebase_core: "0.7.0"
+  firebase_auth: "^0.20.0"
+  google_sign_in: "^4.5.1"
+  cloud_firestore: "^0.16.0"
+  firebase_storage: "^7.0.0"
+
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -57,6 +66,7 @@ flutter:
   assets:
     - assets/
     - assets/png/
+    - assets/curveDesign/
    
 
   # An image asset can refer to one or more resolution-specific "variants", see

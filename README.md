@@ -1,6 +1,6 @@
 # bits_news
-an Application using firebase service to shows local feeds , news , events occurs
-almost all the assets file are build from scratch and animation is from rive 1 (Flare)
+an Application using firebase service to shows feeds and events
+
 ## Getting Started
 <img src="assets/png/feeds.png" height=300 width=300>
 

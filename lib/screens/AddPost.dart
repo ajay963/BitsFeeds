@@ -134,6 +134,7 @@ class FeedsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       //  height: 560,
+      padding: EdgeInsets.only(bottom: 20),
       width: MediaQuery.of(context).size.width - 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,29 +163,31 @@ class FeedsCard extends StatelessWidget {
             margin: EdgeInsets.only(left: 15),
             child: FlatGradientButton(
               ontap: onAddPhotoButtonTrigrred,
+              width: 160,
               child: Text(
                 'Add Photo',
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
                 style: TextStyle(
-                    color: kBlackLessDark,
+                    color: kWhiteBgColor,
                     fontSize: 24,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.w500),
               ),
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 15),
+            margin: EdgeInsets.only(left: 15, top: 15),
             child: FlatGradientButton(
               ontap: () {
                 print(date);
               },
+              width: 150,
               child: Text(
                 'Upload',
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                    color: kBlackLessDark,
+                    color: kWhiteBgColor,
                     fontSize: 24,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.w500),
               ),
             ),
           )
@@ -195,7 +198,7 @@ class FeedsCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
           boxShadow: [
             BoxShadow(
-                color: kBlackDark.withOpacity(0.2),
+                color: kGreyDark.withOpacity(0.6),
                 offset: Offset(0, 0),
                 blurRadius: 20)
           ]),

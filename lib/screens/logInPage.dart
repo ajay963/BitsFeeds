@@ -78,21 +78,20 @@ class _SomeThingsState extends State<SomeThings> {
           ),
           SizedBox(height: 20),
           FlatGradientButton(
-            ontap: () {},
-            //  async {
-            // String mssg = await context.read<AuthenticationProvider>().signIn(
-            //     email: emailController.text.trim(),
-            //     password: passwordController.text.trim());
-            // stylesAndControl.setActionButtonState(getState: true);
-            // if (mssg != "True") {
-            //   await showDialog(
-            //       context: context,
-            //       builder: (BuildContext context) {
-            //         return MssgDialog(
-            //             title: 'Failed', mssg: mssg, context: context);
-            //       });
-            // }
-            //  },
+            ontap: () async {
+              String mssg = await context.read<AuthenticationProvider>().signIn(
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim());
+              stylesAndControl.setActionButtonState(getState: true);
+              if (mssg != "True") {
+                await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return MssgDialog(
+                          title: 'Failed', mssg: mssg, context: context);
+                    });
+              }
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

@@ -189,7 +189,8 @@ class FlatGlassButton extends StatelessWidget {
 class FlatGradientButton extends StatelessWidget {
   final Widget child;
   final Function ontap;
-  FlatGradientButton({@required this.ontap, this.child});
+  final double width;
+  FlatGradientButton({@required this.ontap, this.child, this.width});
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -205,8 +206,10 @@ class FlatGradientButton extends StatelessWidget {
           onTap: ontap,
           child: Ink(
             child: child,
-            width: MediaQuery.of(context).size.width * 0.5,
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            width: (width == null)
+                ? MediaQuery.of(context).size.width * 0.5
+                : width,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
               gradient: kThemeGradient2,
             ),

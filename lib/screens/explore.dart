@@ -1,5 +1,7 @@
 import 'package:bits_news/Provider/authServices.dart';
 import 'package:bits_news/component/constants.dart';
+import 'package:bits_news/screens/AddPost.dart';
+// import 'package:bits_news/screens/ClubPage.dart';
 // import 'package:bits_news/screens/AddPost.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -48,7 +50,8 @@ class ExplorePage extends StatelessWidget {
                     subTitle: 'Do some contribution',
                     icon: FontAwesomeIcons.code),
                 GradientCards(
-                    onTap: () {},
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AddPost())),
                     // onTap: () => Navigator.push(context,
                     //     MaterialPageRoute(builder: (context) => AddPost())),
                     title: 'Societies',

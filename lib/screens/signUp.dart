@@ -272,7 +272,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               ? RaisedWhiteButton(
                                   ontap: () async {
                                     await cloudService.clubImageUpload(
-                                        imageToUpload: imageFile);
+                                        imageFileToUpload: imageFile);
                                   },
                                   child: Text('Upload',
                                       style: TextStyle(

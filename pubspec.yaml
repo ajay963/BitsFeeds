@@ -38,6 +38,8 @@ dependencies:
   font_awesome_flutter: ^8.10.0
   table_calendar: ^2.3.3
   image_picker: ^0.6.7+21
+  rive: ^0.6.2
+  google_fonts: ^1.1.2
 
   # firebase pulgin only
   firebase_core: "0.7.0"
@@ -67,6 +69,7 @@ flutter:
     - assets/
     - assets/png/
     - assets/curveDesign/
+    - assets/animations/
    
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -80,14 +83,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf
-        - asset: assets/fonts/Roboto-Bold.ttf
-        - asset: assets/fonts/Roboto-Black.ttf
-        - asset: assets/fonts/Roboto-Thin.ttf
-        - asset: assets/fonts/Roboto-Medium.ttf
+  # fonts:
+  #   - family: Roboto
+  #     fonts:
+  #       - asset: assets/fonts/Roboto-Regular.ttf
+  #       - asset: assets/fonts/Roboto-Bold.ttf
+  #       - asset: assets/fonts/Roboto-Black.ttf
+  #       - asset: assets/fonts/Roboto-Thin.ttf
+  #       - asset: assets/fonts/Roboto-Medium.ttf
     
   #   - family: Trajan Pro
   #     fonts:

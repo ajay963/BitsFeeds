@@ -4,13 +4,19 @@ import 'package:flutter/foundation.dart';
 
 class FirestoreService extends ChangeNotifier {
   User userId;
-  addFeed(String imageUrl, String userName, String userProfilePic,
-      DateTime dateTime, String description) async {
+  addFeed(
+      {String imageUrl,
+      String userEmail,
+      String userName,
+      String userProfilePicUrl,
+      DateTime dateTime,
+      String description}) async {
     CollectionReference feedsCollection =
         FirebaseFirestore.instance.collection('feeds');
     Map<String, dynamic> feedData = {
       "userName": userName,
-      "userProfilePic": userProfilePic,
+      "userProfilePic": userProfilePicUrl,
+      "userEmail": userEmail,
       "imageUrl": imageUrl,
       "dateTime": dateTime,
       "description": description,

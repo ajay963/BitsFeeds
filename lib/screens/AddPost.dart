@@ -1,6 +1,9 @@
 import 'dart:io';
-
 import 'package:bits_news/component/constants.dart';
+import 'package:bits_news/screens/LoadingPage.dart';
+import 'package:bits_news/screens/signUp.dart';
+import 'package:bits_news/services/cloudServices.dart';
+import 'package:bits_news/services/firestoreService.dart';
 import 'package:bits_news/widgets/glassMorphism.dart';
 import 'package:bits_news/widgets/textField.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +12,28 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+class AddPostMain extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final cloudStorage = Provider.of<CloudStorageService>(context);
+
+    return Stack(
+      children: [
+        AddPost(),
+        (cloudStorage.isUploading == true)
+            ? UploadFileAnimation(
+                child: Text(
+                  'Uploading ${cloudStorage.dataTransferSize}KB out of ${cloudStorage.totalDataSize}KB',
+                  style: TextStyle(color: kWhiteBgColor, fontSize: 20),
+                ),
+              )
+            : SizedBox()
+      ],
+    );
+  }
+}
 
 class AddPost extends StatefulWidget {
   @override
@@ -16,6 +41,7 @@ class AddPost extends StatefulWidget {
 }
 
 class _AddPostState extends State<AddPost> {
+  final TextEditingController descriptionController = TextEditingController();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   File _imageFile;
   final picker = ImagePicker();
@@ -34,11 +60,40 @@ class _AddPostState extends State<AddPost> {
   }
 
   @override
+  void dispose() async {
+    if (_imageFile.existsSync()) _imageFile.delete();
+    descriptionController.dispose();
+    // _imageFile.delete();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final User userData = firebaseAuth.currentUser;
+    final fireStore = Provider.of<FirestoreService>(context);
+    final cloudStorage = Provider.of<CloudStorageService>(context);
 
     print('data from snapshot ${userData.email}');
     print('data from snapshot ${userData.uid}');
+
+    addPostData(
+        {String imageUrl,
+        String userEmail,
+        String userName,
+        String userProfilePicUrl,
+        DateTime dateTime,
+        String description}) async {
+      await fireStore.addFeed(
+          imageUrl: imageUrl,
+          userEmail: userEmail,
+          userName: userName,
+          userProfilePicUrl: userProfilePicUrl,
+          dateTime: dateTime,
+          description: description);
+      await cloudStorage.cloudServiceVariableReset();
+      Navigator.pop(context);
+    }
+
     //final User userData = Provider.of<FirestoreService>(context).getUser();
     final CollectionReference accountData = FirebaseFirestore.instance
         .collection('club')
@@ -94,17 +149,51 @@ class _AddPostState extends State<AddPost> {
                     SizedBox(height: 20),
                     FeedsCard(
                         onAddPhotoButtonTrigrred: () => getImage(),
-                        onUploadButtonTrigrred: () => _imageFile.delete(),
+                        onUploadButtonTrigrred: () async {
+                          if (_imageFile == null) {
+                            showDialog(
+                                context: context,
+                                builder: (context) => MssgDialog(
+                                    title: 'Error',
+                                    mssg: 'PLaese add photo',
+                                    context: context));
+                          } else if (await _imageFile.length() > 1024 * 700) {
+                            showDialog(
+                                context: context,
+                                builder: (context) => MssgDialog(
+                                    title: 'Size Exceed',
+                                    mssg: 'Please select a file less than 1 MB',
+                                    context: context));
+                          } else if (await _imageFile.exists()) {
+                            print('upload starte');
+                            await cloudStorage.feedsImageUpload(
+                                imageFileToUpload: _imageFile);
+                            print('upload end');
+                          }
+                        },
+                        onPostButtonTrigrred: () => addPostData(
+                              userEmail: userData.email,
+                              dateTime: DateTime.now(),
+                              imageUrl: cloudStorage.imageUrl,
+                              description: descriptionController.text,
+                              userName:
+                                  snapshot.data.docs[0].data()['clubName'],
+                              userProfilePicUrl:
+                                  snapshot.data.docs[0].data()['imageUrl'],
+                            ),
                         postImageFile: _imageFile,
                         date: date,
                         name: snapshot.data.docs[0].data()['clubName'],
                         imageUrl: snapshot.data.docs[0].data()['imageUrl']),
                     SizedBox(height: 20),
-                    BorderedColoredTextField(
-                      fieldName: 'Tell Something',
-                      color: kPkThemeShade1,
-                      maxLines: 5,
-                    )
+                    (cloudStorage.isSucess == true)
+                        ? BorderedColoredTextField(
+                            fieldName: 'Tell Something',
+                            color: kPkThemeShade1,
+                            maxLines: 5,
+                            controller: descriptionController,
+                          )
+                        : SizedBox()
                   ],
                 ),
               ),
@@ -123,15 +212,20 @@ class FeedsCard extends StatelessWidget {
   final File postImageFile;
   final Function onUploadButtonTrigrred;
   final Function onAddPhotoButtonTrigrred;
+  final Function onPostButtonTrigrred;
+
   FeedsCard(
       {@required this.name,
       @required this.imageUrl,
       @required this.postImageFile,
       @required this.date,
       this.onAddPhotoButtonTrigrred,
-      this.onUploadButtonTrigrred});
+      this.onUploadButtonTrigrred,
+      this.onPostButtonTrigrred});
   @override
   Widget build(BuildContext context) {
+    final cloudStorage = Provider.of<CloudStorageService>(context);
+
     return Container(
       //  height: 560,
       padding: EdgeInsets.only(bottom: 20),
@@ -159,38 +253,57 @@ class FeedsCard extends StatelessWidget {
             date: date,
           ),
           SizedBox(height: 20),
-          Container(
-            margin: EdgeInsets.only(left: 15),
-            child: FlatGradientButton(
-              ontap: onAddPhotoButtonTrigrred,
-              width: 160,
-              child: Text(
-                'Add Photo',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: kWhiteBgColor,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 15, top: 15),
-            child: FlatGradientButton(
-              ontap: () {
-                print(date);
-              },
-              width: 150,
-              child: Text(
-                'Upload',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: kWhiteBgColor,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-          )
+          (cloudStorage.isSucess == false)
+              ? Container(
+                  margin: EdgeInsets.only(left: 15),
+                  child: FlatGradientButton(
+                    ontap: onAddPhotoButtonTrigrred,
+                    width: 160,
+                    child: Text(
+                      'Add Photo',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: kBlackLessDark,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              : SizedBox(),
+          (cloudStorage.isSucess == false)
+              ? Container(
+                  margin: EdgeInsets.only(left: 15, top: 15),
+                  child: FlatGradientButton(
+                    ontap: onUploadButtonTrigrred,
+                    width: 120,
+                    child: Text(
+                      'Upload',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: kBlackLessDark,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              : SizedBox(),
+          (cloudStorage.isSucess == true)
+              ? Container(
+                  margin: EdgeInsets.only(left: 15, top: 15),
+                  child: FlatGradientButton(
+                    ontap: onPostButtonTrigrred,
+                    width: 120,
+                    child: Text(
+                      'Post',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: kBlackLessDark,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              : SizedBox(),
         ],
       ),
       decoration: BoxDecoration(

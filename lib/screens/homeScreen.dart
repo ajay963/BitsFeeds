@@ -1,6 +1,7 @@
 import 'package:bits_news/Provider/navBar.dart';
 //import 'package:bits_news/Provider/styles.dart';
 import 'package:bits_news/component/constants.dart';
+import 'package:bits_news/screens/LoadingPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,22 @@ class Home extends StatelessWidget {
                 height: 70,
                 width: 70,
                 child: RawMaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return UploadFileAnimation(
+                            child: Text(
+                              'Uploading',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          );
+                        });
+                  },
                   shape: CircleBorder(),
                   //  RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   elevation: 6,

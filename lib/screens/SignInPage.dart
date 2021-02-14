@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:bits_news/Provider/styles.dart';
 import 'package:bits_news/screens/signUp.dart';
 import 'package:bits_news/widgets/glassMorphism.dart';

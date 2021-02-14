@@ -51,7 +51,7 @@ class ExplorePage extends StatelessWidget {
                     icon: FontAwesomeIcons.code),
                 GradientCards(
                     onTap: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AddPost())),
+                        MaterialPageRoute(builder: (context) => AddPostMain())),
                     // onTap: () => Navigator.push(context,
                     //     MaterialPageRoute(builder: (context) => AddPost())),
                     title: 'Societies',

@@ -209,9 +209,9 @@ class FlatGradientButton extends StatelessWidget {
             width: (width == null)
                 ? MediaQuery.of(context).size.width * 0.5
                 : width,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: EdgeInsets.only(top: 10, left: 20, bottom: 10, right: 0),
             decoration: BoxDecoration(
-              gradient: kThemeGradient2,
+              gradient: kThemeGradient,
             ),
           ),
         ),

@@ -1,5 +1,5 @@
 import 'package:bits_news/screens/homeScreen.dart';
-import 'package:bits_news/screens/logInPage.dart';
+import 'package:bits_news/screens/SignInPage.dart';
 import 'package:bits_news/services/cloudServices.dart';
 import 'package:bits_news/services/firestoreService.dart';
 import 'package:firebase_auth/firebase_auth.dart';

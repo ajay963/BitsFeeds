@@ -13,15 +13,15 @@ class CloudStorageService extends ChangeNotifier {
   double dataTransferSize;
   double totalDataSize;
 
-  Future<String> clubImageUpload({@required File imageToUpload}) async {
-    String fileNameToUpload = path.basename(imageToUpload.path);
+  Future<String> clubImageUpload({@required File imageFileToUpload}) async {
+    String fileNameToUpload = path.basename(imageFileToUpload.path);
 
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('Club')
         .child(fileNameToUpload);
     try {
-      firebase_storage.UploadTask task = ref.putFile(imageToUpload);
+      firebase_storage.UploadTask task = ref.putFile(imageFileToUpload);
       //  useless code await storage.ref("imageToUpload").putFile(imageToUpload);
 
       task.snapshotEvents.listen((event) async {
@@ -39,6 +39,7 @@ class CloudStorageService extends ChangeNotifier {
             print('IMage URL FRom main pass:$imageUrl');
             //  print('image URL from Main: $urlOfImage');
             notifyListeners();
+            imageFileToUpload.delete();
           });
         }
       });
@@ -49,15 +50,15 @@ class CloudStorageService extends ChangeNotifier {
     }
   }
 
-  Future<String> feedsImageUpload({@required File imageToUpload}) async {
-    String fileNameToUpload = path.basename(imageToUpload.path);
+  Future<String> feedsImageUpload({@required File imageFileToUpload}) async {
+    String fileNameToUpload = path.basename(imageFileToUpload.path);
 
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('feeds')
         .child(fileNameToUpload);
     try {
-      firebase_storage.UploadTask task = ref.putFile(imageToUpload);
+      firebase_storage.UploadTask task = ref.putFile(imageFileToUpload);
       //  useless code await storage.ref("imageToUpload").putFile(imageToUpload);
 
       task.snapshotEvents.listen((event) async {
@@ -75,6 +76,7 @@ class CloudStorageService extends ChangeNotifier {
             print('IMage URL FRom main pass:$imageUrl');
             //  print('image URL from Main: $urlOfImage');
             notifyListeners();
+            imageFileToUpload.delete();
           });
         }
       });
@@ -85,15 +87,15 @@ class CloudStorageService extends ChangeNotifier {
     }
   }
 
-  Future<String> eventsImageUpload({@required File imageToUpload}) async {
-    String fileNameToUpload = path.basename(imageToUpload.path);
+  Future<String> eventsImageUpload({@required File imageFileToUpload}) async {
+    String fileNameToUpload = path.basename(imageFileToUpload.path);
 
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('Club')
+        .child('Event')
         .child(fileNameToUpload);
     try {
-      firebase_storage.UploadTask task = ref.putFile(imageToUpload);
+      firebase_storage.UploadTask task = ref.putFile(imageFileToUpload);
       //  useless code await storage.ref("imageToUpload").putFile(imageToUpload);
 
       task.snapshotEvents.listen((event) async {
@@ -101,6 +103,7 @@ class CloudStorageService extends ChangeNotifier {
           isUploading = true;
           dataTransferSize = (event.bytesTransferred / 1024).roundToDouble();
           totalDataSize = (event.totalBytes / 1024).roundToDouble();
+          print(dataTransferSize);
           notifyListeners();
         }
         if (event.state == firebase_storage.TaskState.success) {
@@ -110,6 +113,8 @@ class CloudStorageService extends ChangeNotifier {
             imageUrl = urlOfImage;
             print('IMage URL FRom main pass:$imageUrl');
             //  print('image URL from Main: $urlOfImage');
+            if (imageFileToUpload == null) imageFileToUpload.delete();
+
             notifyListeners();
           });
         }
@@ -124,7 +129,6 @@ class CloudStorageService extends ChangeNotifier {
   cloudServiceVariableReset() {
     isSucess = false;
     isUploading = false;
-    imageUrl = null;
     notifyListeners();
   }
 }

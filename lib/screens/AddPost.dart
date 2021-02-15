@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -60,8 +61,7 @@ class _AddPostState extends State<AddPost> {
   }
 
   @override
-  void dispose() async {
-    if (_imageFile.existsSync()) _imageFile.delete();
+  void dispose() {
     descriptionController.dispose();
     // _imageFile.delete();
     super.dispose();
@@ -112,89 +112,92 @@ class _AddPostState extends State<AddPost> {
             return Center(child: Text("Loading"));
           }
 
-          return SingleChildScrollView(
-            child: Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width - 50,
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 40),
-                    Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Add Post',
-                            style: TextStyle(
-                                fontSize: 36,
-                                color: kPkThemeShade1,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: Icon(FontAwesomeIcons.timesCircle,
-                                color: kBlackLessDark, size: 40),
-                          )
-                        ]),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(DateFormat.yMMMd().format(date).toString(),
-                          style: TextStyle(
-                              fontSize: 24,
-                              color: kBlackLessDark,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                    SizedBox(height: 20),
-                    FeedsCard(
-                        onAddPhotoButtonTrigrred: () => getImage(),
-                        onUploadButtonTrigrred: () async {
-                          if (_imageFile == null) {
-                            showDialog(
-                                context: context,
-                                builder: (context) => MssgDialog(
-                                    title: 'Error',
-                                    mssg: 'PLaese add photo',
-                                    context: context));
-                          } else if (await _imageFile.length() > 1024 * 700) {
-                            showDialog(
-                                context: context,
-                                builder: (context) => MssgDialog(
-                                    title: 'Size Exceed',
-                                    mssg: 'Please select a file less than 1 MB',
-                                    context: context));
-                          } else if (await _imageFile.exists()) {
-                            print('upload starte');
-                            await cloudStorage.feedsImageUpload(
-                                imageFileToUpload: _imageFile);
-                            print('upload end');
-                          }
-                        },
-                        onPostButtonTrigrred: () => addPostData(
-                              userEmail: userData.email,
-                              dateTime: DateTime.now(),
-                              imageUrl: cloudStorage.imageUrl,
-                              description: descriptionController.text,
-                              userName:
-                                  snapshot.data.docs[0].data()['clubName'],
-                              userProfilePicUrl:
-                                  snapshot.data.docs[0].data()['imageUrl'],
+          return SafeArea(
+            child: SingleChildScrollView(
+              child: Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width - 50,
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 40),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Add Post',
+                              style: TextStyle(
+                                  fontSize: 36,
+                                  color: kPkThemeShade1,
+                                  fontWeight: FontWeight.w400),
                             ),
-                        postImageFile: _imageFile,
-                        date: date,
-                        name: snapshot.data.docs[0].data()['clubName'],
-                        imageUrl: snapshot.data.docs[0].data()['imageUrl']),
-                    SizedBox(height: 20),
-                    (cloudStorage.isSucess == true)
-                        ? BorderedColoredTextField(
-                            fieldName: 'Tell Something',
-                            color: kPkThemeShade1,
-                            maxLines: 5,
-                            controller: descriptionController,
-                          )
-                        : SizedBox()
-                  ],
+                            GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: Icon(FontAwesomeIcons.timesCircle,
+                                  color: kBlackLessDark, size: 40),
+                            )
+                          ]),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(DateFormat.yMMMd().format(date).toString(),
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: kBlackLessDark,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      SizedBox(height: 20),
+                      FeedsCard(
+                          onAddPhotoButtonTrigrred: () => getImage(),
+                          onUploadButtonTrigrred: () async {
+                            if (_imageFile == null) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => MssgDialog(
+                                      title: 'Error',
+                                      mssg: 'PLaese add photo',
+                                      context: context));
+                            } else if (await _imageFile.length() > 1024 * 700) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => MssgDialog(
+                                      title: 'Size Exceed',
+                                      mssg:
+                                          'Please select a file less than 1 MB',
+                                      context: context));
+                            } else if (await _imageFile.exists()) {
+                              print('upload starte');
+                              await cloudStorage.feedsImageUpload(
+                                  imageFileToUpload: _imageFile);
+                              print('upload end');
+                            }
+                          },
+                          onPostButtonTrigrred: () => addPostData(
+                                userEmail: userData.email,
+                                dateTime: DateTime.now(),
+                                imageUrl: cloudStorage.imageUrl,
+                                description: descriptionController.text,
+                                userName:
+                                    snapshot.data.docs[0].data()['clubName'],
+                                userProfilePicUrl:
+                                    snapshot.data.docs[0].data()['imageUrl'],
+                              ),
+                          postImageFile: _imageFile,
+                          date: date,
+                          name: snapshot.data.docs[0].data()['clubName'],
+                          imageUrl: snapshot.data.docs[0].data()['imageUrl']),
+                      SizedBox(height: 20),
+                      (cloudStorage.isSucess == true)
+                          ? BorderedColoredTextField(
+                              fieldName: 'Tell Something',
+                              color: kPkThemeShade1,
+                              maxLines: 5,
+                              controller: descriptionController,
+                            )
+                          : SizedBox()
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -228,12 +231,11 @@ class FeedsCard extends StatelessWidget {
 
     return Container(
       //  height: 560,
-      padding: EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       width: MediaQuery.of(context).size.width - 50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 20),
           Center(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
@@ -241,8 +243,8 @@ class FeedsCard extends StatelessWidget {
                 image: (postImageFile == null)
                     ? AssetImage('assets/png/2.jpg')
                     : FileImage(postImageFile),
-                height: MediaQuery.of(context).size.width - 80,
-                width: MediaQuery.of(context).size.width - 80,
+                height: MediaQuery.of(context).size.width - 50,
+                width: MediaQuery.of(context).size.width - 50,
                 fit: BoxFit.cover,
               ),
             ),
@@ -348,20 +350,25 @@ class FeedsTextCard extends StatelessWidget {
                 Expanded(
                   child: RichText(
                       overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        TextSpan(
-                            text: (name.isEmpty) ? 'Name\n' : name + '\n',
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: kBlackLessDark,
-                                fontWeight: FontWeight.bold)),
-                        TextSpan(
-                            text: DateFormat.yMMMd().format(date).toString(),
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: kBlackLessDark,
-                                fontWeight: FontWeight.w600)),
-                      ])),
+                      text: TextSpan(
+                          style: TextStyle(
+                            fontFamily: GoogleFonts.itim().fontFamily,
+                          ),
+                          children: [
+                            TextSpan(
+                                text: (name.isEmpty) ? 'Name\n' : name + '\n',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: kBlackLessDark,
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text:
+                                    DateFormat.yMMMd().format(date).toString(),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: kBlackLessDark,
+                                    fontWeight: FontWeight.w600)),
+                          ])),
                 )
               ],
             ),

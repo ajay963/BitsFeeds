@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ClubPass extends StatelessWidget {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -65,10 +66,11 @@ class ClubPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('About',
+                      Text('Club Page',
                           style: TextStyle(
+                              // fontFamily: GoogleFonts.delius().fontFamily,
                               color: kBlackLessDark,
-                              fontSize: 36,
+                              fontSize: 38,
                               fontWeight: FontWeight.bold)),
                       InkWell(
                         onTap: () => Navigator.pop(context),
@@ -78,57 +80,46 @@ class ClubPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
-                Container(
-                    width: MediaQuery.of(context).size.width - 30,
-                    height: MediaQuery.of(context).size.width - 30,
-                    padding: EdgeInsets.all(14),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image(
-                          image: NetworkImage(imageUrl),
-                          fit: BoxFit.cover,
-                          width: MediaQuery.of(context).size.width - 30,
-                          height: MediaQuery.of(context).size.width - 30),
-                    ),
+                SizedBox(height: 60),
+                Center(
+                  child: Container(
+                    child: CircleAvatar(
+                        backgroundImage: NetworkImage(imageUrl), radius: 90),
                     decoration: BoxDecoration(
-                        color: kWhiteBgColor,
-                        borderRadius: BorderRadius.circular(10),
+                        shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                              color: kGreyDark.withOpacity(0.3),
-                              blurRadius: 8,
-                              spreadRadius: 10,
-                              offset: Offset(0, 0))
-                        ])),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Container(height: 55, width: 5, color: kBlackLessDark),
-                    SizedBox(width: 5),
-                    RichText(
-                      text: TextSpan(children: [
-                        TextSpan(
-                            text: clubName + '\n',
-                            style: TextStyle(
-                                color: kBlackLessDark,
-                                fontSize: 28,
-                                fontWeight: FontWeight.w600)),
-                        TextSpan(
-                            text: instituteName,
-                            style: TextStyle(
-                                color: kBlackLessDark,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600))
-                      ]),
-                    )
-                  ],
+                              color: kGreyDark,
+                              offset: Offset(0, 0),
+                              blurRadius: 12)
+                        ]),
+                  ),
                 ),
+                SizedBox(height: 20),
+                Center(
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                        style: TextStyle(
+                            color: kBlackLessDark,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: GoogleFonts.itim().fontFamily),
+                        children: [
+                          TextSpan(
+                              text: clubName + '\n',
+                              style: TextStyle(
+                                fontSize: 28,
+                              )),
+                          TextSpan(
+                              text: instituteName,
+                              style: TextStyle(
+                                fontSize: 24,
+                              ))
+                        ]),
+                  ),
+                ),
+                SizedBox(height: 40),
                 TitlesText(title: 'About', titleDescription: about),
-                // Divider(
-                //   color: kGreyDark.withOpacity(0.5),
-                //   thickness: 2,
-                // ),
                 TitlesText(title: 'Motives', titleDescription: motive)
               ],
             ),
@@ -146,7 +137,7 @@ class TitlesText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 15),
+      margin: EdgeInsets.symmetric(vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -157,7 +148,10 @@ class TitlesText extends StatelessWidget {
                   fontSize: 28)),
           SizedBox(height: 5),
           Text(titleDescription,
-              style: TextStyle(color: kBlackLessDark, fontSize: 20))
+              style: TextStyle(
+                  fontFamily: GoogleFonts.delius().fontFamily,
+                  color: kBlackLessDark,
+                  fontSize: 20))
         ],
       ),
     );

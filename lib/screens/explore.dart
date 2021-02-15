@@ -1,10 +1,12 @@
 import 'package:bits_news/Provider/authServices.dart';
 import 'package:bits_news/component/constants.dart';
 import 'package:bits_news/screens/AddPost.dart';
+import 'package:bits_news/screens/ClubPage.dart';
 // import 'package:bits_news/screens/ClubPage.dart';
 // import 'package:bits_news/screens/AddPost.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ExplorePage extends StatelessWidget {
@@ -27,20 +29,24 @@ class ExplorePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 20, left: 30),
                   child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                          text: 'Explore\n',
-                          style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.w400,
-                              color: kPkThemeShade1)),
-                      TextSpan(
-                          text: 'Searching something else',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: kBlackLessDark,
-                              fontWeight: FontWeight.bold))
-                    ]),
+                    text: TextSpan(
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.itim().fontFamily,
+                        ),
+                        children: [
+                          TextSpan(
+                              text: 'Explore\n',
+                              style: TextStyle(
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.w400,
+                                  color: kPkThemeShade1)),
+                          TextSpan(
+                              text: 'Searching something else',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: kBlackLessDark,
+                                  fontWeight: FontWeight.bold))
+                        ]),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -58,9 +64,10 @@ class ExplorePage extends StatelessWidget {
                     subTitle: 'take a glimpse of clubs ',
                     icon: FontAwesomeIcons.fire),
                 GradientCards(
-                    onTap: () {},
-                    title: 'About',
-                    subTitle: 'Short brief of this app',
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ClubPass())),
+                    title: 'club Info',
+                    subTitle: 'Short brief of the club',
                     icon: Icons.info),
                 GradientCards(
                     onTap: () {},
@@ -109,20 +116,24 @@ class GradientCards extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                          text: title + '\n',
-                          style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: kBlackLessDark)),
-                      TextSpan(
-                          text: subTitle,
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: kBlackLessDark,
-                              fontWeight: FontWeight.w600))
-                    ]),
+                    text: TextSpan(
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.itim().fontFamily,
+                        ),
+                        children: [
+                          TextSpan(
+                              text: title + '\n',
+                              style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: kBlackLessDark)),
+                          TextSpan(
+                              text: subTitle,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: kBlackLessDark,
+                                  fontWeight: FontWeight.w600))
+                        ]),
                   ),
                   Container(
                     // this container for circular button

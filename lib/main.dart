@@ -10,6 +10,7 @@ import 'Provider/authServices.dart';
 import 'Provider/navBar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Provider/styles.dart';
+import 'component/theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,7 @@ class FireBaseAuth extends StatelessWidget {
                 context.read<AuthenticationProvider>().authStateChanges)
       ],
       child: MaterialApp(
+        theme: CustomTheme1.lightTheme(context),
         home: Scaffold(
           backgroundColor: Colors.white,
           body: Authenticate(),

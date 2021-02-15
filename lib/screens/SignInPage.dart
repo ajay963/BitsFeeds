@@ -26,7 +26,8 @@ class LoginPage extends StatelessWidget {
         child: GlowingOverscrollIndicator(
             axisDirection: AxisDirection.down,
             color: Colors.orange,
-            child: SingleChildScrollView(child: SomeThings())),
+            child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(), child: SomeThings())),
       ),
     ]);
   }

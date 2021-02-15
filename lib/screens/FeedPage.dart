@@ -4,6 +4,7 @@ import 'package:bits_news/component/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 // import 'package:provider/provider.dart';
 
@@ -19,23 +20,27 @@ class FeedPage extends StatelessWidget {
         children: [
           SizedBox(height: 40),
           Container(
-              margin: EdgeInsets.only(left: 20),
+              margin: EdgeInsets.only(left: 30),
               alignment: Alignment.topLeft,
               child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: 'Discover\n',
-                      style: TextStyle(
-                          fontSize: 48,
-                          fontWeight: FontWeight.w400,
-                          color: kPkThemeShade1)),
-                  TextSpan(
-                      text: 'Get youself updated',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: kBlackLessDark,
-                          fontWeight: FontWeight.bold))
-                ]),
+                text: TextSpan(
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.itim().fontFamily,
+                    ),
+                    children: [
+                      TextSpan(
+                          text: 'Discover\n',
+                          style: TextStyle(
+                              fontSize: 48,
+                              fontWeight: FontWeight.w400,
+                              color: kPkThemeShade1)),
+                      TextSpan(
+                          text: 'Get youself updated',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: kBlackLessDark,
+                              fontWeight: FontWeight.bold))
+                    ]),
               )),
           SizedBox(height: 20),
           Expanded(
@@ -97,7 +102,7 @@ class FeedsCard extends StatelessWidget {
         children: [
           Center(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(20),
               child: Image(
                 image: NetworkImage(imageUrl),
                 height: MediaQuery.of(context).size.width - 50,
@@ -112,19 +117,27 @@ class FeedsCard extends StatelessWidget {
             date: date,
             userImageUrl: userImageUrl,
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
+          Padding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Text(
+              description,
+              maxLines: 3,
+              style: TextStyle(
+                  fontFamily: GoogleFonts.delius().fontFamily,
+                  color: kBlackLessDark,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w300),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(left: 10),
-            child: RichText(
-              text: TextSpan(
-                  style: TextStyle(
-                      fontSize: 20, height: 1.2, color: kBlackLessDark),
-                  children: [
-                    TextSpan(text: description + '\n'),
-                    TextSpan(
-                        text: 'Read More',
-                        style: TextStyle(color: kPkThemeShade1))
-                  ]),
+            child: Text(
+              'Read More',
+              style: TextStyle(
+                  color: kPkThemeShade1,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(height: 10)
@@ -132,7 +145,7 @@ class FeedsCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
           color: kWhiteBgColor,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
                 color: kGreyDark.withOpacity(1),
@@ -179,6 +192,7 @@ class FeedsTextCard extends StatelessWidget {
                         TextSpan(
                             text: (name.isEmpty) ? 'Name\n' : name + '\n',
                             style: TextStyle(
+                                fontFamily: GoogleFonts.itim().fontFamily,
                                 fontSize: 20,
                                 color: kBlackLessDark,
                                 fontWeight: FontWeight.bold)),
@@ -187,6 +201,7 @@ class FeedsTextCard extends StatelessWidget {
                                 .format(date.toDate())
                                 .toString(),
                             style: TextStyle(
+                                fontFamily: GoogleFonts.itim().fontFamily,
                                 fontSize: 18,
                                 color: kBlackLessDark,
                                 fontWeight: FontWeight.w600)),

@@ -1,77 +1,116 @@
 import 'package:bits_news/component/constants.dart';
-import 'package:bits_news/modals/styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class EventPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final styles = Provider.of<CustomStyles>(context);
     final ScrollController _scrollController = ScrollController();
     return SafeArea(
       child: SingleChildScrollView(
-          // physics: ScrollPhysics(parent: ),
+          physics: BouncingScrollPhysics(),
           controller: _scrollController,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image(
-                        height: styles.imageSize,
-                        width: styles.imageSize,
-                        image: AssetImage('assets/png/event.png')),
-                    Text('Event',
-                        style: TextStyle(fontSize: 42, color: korgShade3)),
-                    SizedBox(width: 50)
-                  ]),
-              Calender(),
+              SizedBox(height: 30),
+              Padding(
+                padding: EdgeInsets.only(left: 40),
+                child: RichText(
+                  text: TextSpan(
+                      style: TextStyle(
+                        fontFamily: GoogleFonts.itim().fontFamily,
+                      ),
+                      children: [
+                        TextSpan(
+                            text: 'Events\n',
+                            style: TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.w400,
+                                color: kPkThemeShade1)),
+                        TextSpan(
+                            text: 'Track all the events',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: kBlackLessDark,
+                                fontWeight: FontWeight.bold))
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20),
+              EventInfoCard(eventName: 'kho-kho', date: DateTime.now())
             ],
           )),
     );
   }
 }
 
-class Calender extends StatefulWidget {
-  @override
-  _CalenderState createState() => _CalenderState();
-}
-
-class _CalenderState extends State<Calender> {
-  CalendarController _calendarController;
-
-  _CalenderState();
-  @override
-  void initState() {
-    super.initState();
-    _calendarController = CalendarController();
-  }
-
-  @override
-  void dispose() {
-    _calendarController.dispose();
-    super.dispose();
-  }
-
+class EventInfoCard extends StatelessWidget {
+  final String eventName;
+  final DateTime date;
+  EventInfoCard({@required this.eventName, @required this.date});
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
-      width: MediaQuery.of(context).size.width - 40,
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-              color: Color(0x30000000), offset: Offset(0, 0), blurRadius: 16)
+      margin: EdgeInsets.only(left: 30),
+      height: 120,
+      width: MediaQuery.of(context).size.width - 70,
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image(
+              height: 120,
+              width: MediaQuery.of(context).size.width - 70,
+              image: AssetImage('assets/png/2.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          Container(
+            height: 120,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(color: kWhiteBgColor),
+                        children: [
+                      TextSpan(
+                          text: DateFormat.yMMMd().format(date) + '\n',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: GoogleFonts.delius().fontFamily)),
+                      TextSpan(
+                          text: DateFormat.EEEE().format(date).toString() +
+                              '\n\n',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: GoogleFonts.delius().fontFamily)),
+                      TextSpan(
+                        text: eventName,
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontFamily: GoogleFonts.itim().fontFamily),
+                      )
+                    ])),
+                Icon(
+                  FontAwesomeIcons.angleRight,
+                  color: kWhiteBgColor,
+                )
+              ],
+            ),
+            decoration: BoxDecoration(
+                color: kBlackDark.withOpacity(0.4),
+                borderRadius: BorderRadius.circular(10)),
+          )
         ],
       ),
-      child:
-          Center(child: TableCalendar(calendarController: _calendarController)),
     );
   }
 }

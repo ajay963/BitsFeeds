@@ -1,33 +1,163 @@
+import 'package:bits_news/Provider/authServices.dart';
 import 'package:bits_news/component/constants.dart';
-import 'package:bits_news/modals/styles.dart';
+import 'package:bits_news/screens/AddPost.dart';
+import 'package:bits_news/screens/ClubPage.dart';
+// import 'package:bits_news/screens/ClubPage.dart';
+// import 'package:bits_news/screens/AddPost.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ExplorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final styles = Provider.of<CustomStyles>(context);
-    final ScrollController _scrollController = ScrollController();
+    final authServices = Provider.of<AuthenticationProvider>(context);
+
     return SafeArea(
+        child: ScrollConfiguration(
+      behavior: ScrollBehavior(),
+      child: GlowingOverscrollIndicator(
+        color: korgShade3,
+        axisDirection: AxisDirection.down,
         child: SingleChildScrollView(
-      controller: _scrollController,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
+          physics: BouncingScrollPhysics(),
+          child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image(
-                    height: styles.imageSize,
-                    width: styles.imageSize,
-                    image: AssetImage('assets/png/explore.png')),
-                Text('Explore',
-                    style: TextStyle(fontSize: 42, color: korgShade3)),
-                SizedBox(width: 50)
-              ])
-        ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 30),
+                  child: RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.itim().fontFamily,
+                        ),
+                        children: [
+                          TextSpan(
+                              text: 'Explore\n',
+                              style: TextStyle(
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.w400,
+                                  color: kPkThemeShade1)),
+                          TextSpan(
+                              text: 'Searching something else',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: kBlackLessDark,
+                                  fontWeight: FontWeight.bold))
+                        ]),
+                  ),
+                ),
+                SizedBox(height: 20),
+                GradientCards(
+                    onTap: () {},
+                    title: 'Contribute',
+                    subTitle: 'Do some contribution',
+                    icon: FontAwesomeIcons.code),
+                GradientCards(
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AddPostMain())),
+                    // onTap: () => Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => AddPost())),
+                    title: 'Societies',
+                    subTitle: 'take a glimpse of clubs ',
+                    icon: FontAwesomeIcons.fire),
+                GradientCards(
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ClubPass())),
+                    title: 'club Info',
+                    subTitle: 'Short brief of the club',
+                    icon: Icons.info),
+                GradientCards(
+                    onTap: () {},
+                    title: 'Network',
+                    subTitle: 'check your network status',
+                    icon: FontAwesomeIcons.broadcastTower),
+                GradientCards(
+                    onTap: () {
+                      authServices.signOut();
+                    },
+                    title: 'LogOut',
+                    subTitle: 'Sign in with Diff. account',
+                    icon: FontAwesomeIcons.signOutAlt)
+              ]),
+        ),
       ),
     ));
+  }
+}
+
+class GradientCards extends StatelessWidget {
+  final String title;
+  final String subTitle;
+  final IconData icon;
+  final Function onTap;
+  GradientCards(
+      {@required this.title,
+      @required this.subTitle,
+      @required this.icon,
+      this.onTap});
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        color: Colors.transparent,
+        width: MediaQuery.of(context).size.width - 50,
+        margin: EdgeInsets.only(top: 10, bottom: 10),
+        child: InkWell(
+          onTap: onTap,
+          splashColor: kPkThemeShade1,
+          child: Ink(
+            height: 80,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.itim().fontFamily,
+                        ),
+                        children: [
+                          TextSpan(
+                              text: title + '\n',
+                              style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: kBlackLessDark)),
+                          TextSpan(
+                              text: subTitle,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: kBlackLessDark,
+                                  fontWeight: FontWeight.w600))
+                        ]),
+                  ),
+                  Container(
+                    // this container for circular button
+                    height: 60,
+                    width: 60,
+                    child: Icon(
+                      icon,
+                      color: kBlackLessDark,
+                      size: 36,
+                    ),
+                    decoration: BoxDecoration(
+                      color: kWhiteBgColor.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            decoration: BoxDecoration(
+                gradient: kThemeGradient,
+                borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+      ),
+    );
   }
 }

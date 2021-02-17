@@ -228,8 +228,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                                 .trim(),
                                             userId: userId.uid);
                                         imageFile.delete();
-                                        cloudService
-                                            .cloudServiceVariableReset();
+
                                         Navigator.pop(context);
                                       }
                                     } else {

@@ -92,13 +92,16 @@ class BorderedColoredTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
   final int maxLines;
+  final String Function(String) validator;
   BorderedColoredTextField(
       {this.keyboardType,
       this.color,
       this.controller,
       @required this.fieldName,
       this.obscureText = false,
-      this.maxLines = 1});
+      this.maxLines = 1,
+      this.validator});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -109,6 +112,7 @@ class BorderedColoredTextField extends StatelessWidget {
         keyboardType: keyboardType,
         obscureText: obscureText,
         maxLines: maxLines,
+        validator: validator,
         decoration: InputDecoration(
           labelText: fieldName,
           labelStyle: TextStyle(

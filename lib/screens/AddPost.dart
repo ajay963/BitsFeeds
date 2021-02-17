@@ -90,7 +90,7 @@ class _AddPostState extends State<AddPost> {
           userProfilePicUrl: userProfilePicUrl,
           dateTime: dateTime,
           description: description);
-      await cloudStorage.cloudServiceVariableReset();
+
       Navigator.pop(context);
     }
 

@@ -39,7 +39,9 @@ class CloudStorageService extends ChangeNotifier {
             print('IMage URL FRom main pass:$imageUrl');
             //  print('image URL from Main: $urlOfImage');
             notifyListeners();
-            imageFileToUpload.delete();
+            _cloudServiceVariableReset();
+
+            if (imageFileToUpload == null) imageFileToUpload.delete();
           });
         }
       });
@@ -76,7 +78,9 @@ class CloudStorageService extends ChangeNotifier {
             print('IMage URL FRom main pass:$imageUrl');
             //  print('image URL from Main: $urlOfImage');
             notifyListeners();
-            imageFileToUpload.delete();
+            _cloudServiceVariableReset();
+
+            if (imageFileToUpload == null) imageFileToUpload.delete();
           });
         }
       });
@@ -92,7 +96,7 @@ class CloudStorageService extends ChangeNotifier {
 
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('Event')
+        .child('Events')
         .child(fileNameToUpload);
     try {
       firebase_storage.UploadTask task = ref.putFile(imageFileToUpload);
@@ -116,6 +120,7 @@ class CloudStorageService extends ChangeNotifier {
             if (imageFileToUpload == null) imageFileToUpload.delete();
 
             notifyListeners();
+            _cloudServiceVariableReset();
           });
         }
       });
@@ -126,7 +131,7 @@ class CloudStorageService extends ChangeNotifier {
     }
   }
 
-  cloudServiceVariableReset() {
+  _cloudServiceVariableReset() {
     isSucess = false;
     isUploading = false;
     notifyListeners();

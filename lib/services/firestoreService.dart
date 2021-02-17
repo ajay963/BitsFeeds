@@ -1,18 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class FirestoreService extends ChangeNotifier {
-  User userId;
   addFeed(
-      {String imageUrl,
-      String userEmail,
-      String userName,
-      String userProfilePicUrl,
-      DateTime dateTime,
-      String description}) async {
+      {@required String imageUrl,
+      @required String userEmail,
+      @required String userName,
+      @required String userProfilePicUrl,
+      @required DateTime dateTime,
+      @required String description}) async {
     CollectionReference feedsCollection =
         FirebaseFirestore.instance.collection('feeds');
+    Map<String, dynamic> feedData = {
+      "userName": userName,
+      "userProfilePic": userProfilePicUrl,
+      "userEmail": userEmail,
+      "imageUrl": imageUrl,
+      "dateTime": dateTime,
+      "description": description,
+    };
+    await _addFeedToClub(
+        imageUrl: imageUrl,
+        userEmail: userEmail,
+        userName: userName,
+        userProfilePicUrl: userProfilePicUrl,
+        dateTime: dateTime,
+        description: description);
+    await feedsCollection.add(feedData);
+  }
+
+  _addFeedToClub(
+      {@required String imageUrl,
+      @required String userEmail,
+      @required String userName,
+      @required String userProfilePicUrl,
+      @required DateTime dateTime,
+      @required String description}) async {
+    CollectionReference feedsCollection = FirebaseFirestore.instance
+        .collection('feeds')
+        .doc()
+        .collection(userEmail);
     Map<String, dynamic> feedData = {
       "userName": userName,
       "userProfilePic": userProfilePicUrl,
@@ -25,14 +52,77 @@ class FirestoreService extends ChangeNotifier {
     await feedsCollection.add(feedData);
   }
 
+  addEvent(
+      {@required String imageUrl,
+      @required String userEmail,
+      @required String userName,
+      @required String instituteName,
+      @required String userProfilePicUrl,
+      @required DateTime dateTime,
+      @required String eventDetails,
+      @required String eventRules,
+      @required String judgementCriteria}) async {
+    CollectionReference feedsCollection =
+        FirebaseFirestore.instance.collection('events');
+    Map<String, dynamic> eventData = {
+      "userName": userName,
+      "userProfilePic": userProfilePicUrl,
+      "userEmail": userEmail,
+      "imageUrl": imageUrl,
+      "dateTime": dateTime,
+      "eventDetails": eventDetails,
+      "eventRules": eventRules,
+      "judgementCriteria": judgementCriteria
+    };
+    await _addEventToClub(
+        imageUrl: imageUrl,
+        userEmail: userEmail,
+        userName: userName,
+        instituteName: instituteName,
+        userProfilePicUrl: userProfilePicUrl,
+        dateTime: dateTime,
+        eventDetails: eventDetails,
+        eventRules: eventRules,
+        judgementCriteria: judgementCriteria);
+    await feedsCollection.add(eventData);
+  }
+
+  _addEventToClub(
+      {@required String imageUrl,
+      @required String userEmail,
+      @required String userName,
+      @required String instituteName,
+      @required String userProfilePicUrl,
+      @required DateTime dateTime,
+      @required String eventDetails,
+      @required String eventRules,
+      @required String judgementCriteria}) async {
+    CollectionReference feedsCollection = FirebaseFirestore.instance
+        .collection('events')
+        .doc()
+        .collection(userEmail);
+    Map<String, dynamic> eventData = {
+      "userName": userName,
+      "userProfilePic": userProfilePicUrl,
+      "userEmail": userEmail,
+      "imageUrl": imageUrl,
+      "dateTime": dateTime,
+      "eventDetails": eventDetails,
+      "eventRules": eventRules,
+      "judgementCriteria": judgementCriteria
+    };
+
+    await feedsCollection.add(eventData);
+  }
+
   clubData(
-      {String clubName,
-      String about,
-      String email,
-      String motives,
+      {@required String clubName,
+      @required String about,
+      @required String email,
+      @required String motives,
       @required String imageUrl,
-      String instituteName,
-      String userId}) async {
+      @required String instituteName,
+      @required String userId}) async {
     CollectionReference clubsCollection = FirebaseFirestore.instance
         .collection('club')
         .doc(userId)

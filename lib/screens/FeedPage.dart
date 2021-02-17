@@ -84,6 +84,8 @@ class FeedsCard extends StatelessWidget {
   final String userImageUrl;
   final String description;
 
+  final double borderRadius = 5;
+
   FeedsCard(
       {@required this.name,
       @required this.imageUrl,
@@ -102,7 +104,7 @@ class FeedsCard extends StatelessWidget {
         children: [
           Center(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(borderRadius),
               child: Image(
                 image: NetworkImage(imageUrl),
                 height: MediaQuery.of(context).size.width - 50,
@@ -145,7 +147,7 @@ class FeedsCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
           color: kWhiteBgColor,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(borderRadius),
           boxShadow: [
             BoxShadow(
                 color: kGreyDark.withOpacity(1),

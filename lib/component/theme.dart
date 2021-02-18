@@ -13,7 +13,8 @@ class CustomTheme1 {
       splashColor: kDYThemeShade1);
 
   static ThemeData calenderTheme(BuildContext context) => ThemeData(
-          colorScheme: ColorScheme.light(
+      fontFamily: GoogleFonts.itim().fontFamily,
+      colorScheme: ColorScheme.light(
         primary: Colors.deepPurple,
         onPrimary: Colors.white,
         surface: Colors.pink,

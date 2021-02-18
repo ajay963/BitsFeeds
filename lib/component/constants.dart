@@ -39,3 +39,6 @@ Societies at BIT Sindri''';
 
 const String about = '''Know about the 
 app licences and more''';
+
+const String kImageUrl =
+    'https://firebasestorage.googleapis.com/v0/b/bitsfeeds-fbb1d.appspot.com/o/Events%2Fimage_picker7399447726105744812.jpg?alt=media&token=015ebb37-9282-44ad-8c8f-006a910d7065';

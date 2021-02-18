@@ -33,6 +33,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _aboutController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
+
   Future<bool> signUp({String email, String password}) async {
     String mssg;
 
@@ -49,26 +50,6 @@ class _SignUpPageState extends State<SignUpPage> {
       return false;
     }
     return false;
-  }
-
-  signUpCollection(
-      {String clubName,
-      String instituteName,
-      String about,
-      String motives,
-      @required String imageUrl,
-      String email,
-      String password,
-      String userId}) async {
-    FirestoreService fireStoreService = FirestoreService();
-    await fireStoreService.clubData(
-        clubName: clubName,
-        email: email,
-        instituteName: instituteName,
-        about: about,
-        motives: motives,
-        imageUrl: imageUrl,
-        userId: userId);
   }
 
   Future getImageFile() async {
@@ -90,6 +71,26 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     final cloudService = Provider.of<CloudStorageService>(context);
+    signUpCollection(
+        {String clubName,
+        String instituteName,
+        String about,
+        String motives,
+        @required String imageUrl,
+        String email,
+        String password,
+        String userId}) async {
+      FirestoreService fireStoreService = FirestoreService();
+      await fireStoreService.clubData(
+          clubName: clubName,
+          email: email,
+          instituteName: instituteName,
+          about: about,
+          motives: motives,
+          imageUrl: imageUrl,
+          userId: userId);
+      await cloudService.cloudServiceVariableReset();
+    }
 
     return Scaffold(
       body: ScrollConfiguration(

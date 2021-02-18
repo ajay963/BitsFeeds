@@ -1,3 +1,4 @@
+import 'package:bits_news/Provider/eventNav.dart';
 import 'package:bits_news/screens/homeScreen.dart';
 import 'package:bits_news/screens/SignInPage.dart';
 import 'package:bits_news/services/cloudServices.dart';
@@ -39,6 +40,7 @@ class FireBaseAuth extends StatelessWidget {
             create: (context) => CloudStorageService()),
         ChangeNotifierProvider<FirestoreService>(
             create: (context) => FirestoreService()),
+        ChangeNotifierProvider<EventNav>(create: (context) => EventNav()),
         Provider<AuthenticationProvider>(
             create: (context) => AuthenticationProvider(FirebaseAuth.instance)),
         StreamProvider(

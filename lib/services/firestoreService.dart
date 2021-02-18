@@ -37,7 +37,7 @@ class FirestoreService extends ChangeNotifier {
       @required DateTime dateTime,
       @required String description}) async {
     CollectionReference feedsCollection = FirebaseFirestore.instance
-        .collection('feeds')
+        .collection('feedsCategories')
         .doc()
         .collection(userEmail);
     Map<String, dynamic> feedData = {
@@ -57,6 +57,7 @@ class FirestoreService extends ChangeNotifier {
       @required String userEmail,
       @required String userName,
       @required String instituteName,
+      @required String eventName,
       @required String userProfilePicUrl,
       @required DateTime dateTime,
       @required String eventDetails,
@@ -68,6 +69,8 @@ class FirestoreService extends ChangeNotifier {
       "userName": userName,
       "userProfilePic": userProfilePicUrl,
       "userEmail": userEmail,
+      "instituteName": instituteName,
+      "eventName": eventName,
       "imageUrl": imageUrl,
       "dateTime": dateTime,
       "eventDetails": eventDetails,
@@ -79,6 +82,7 @@ class FirestoreService extends ChangeNotifier {
         userEmail: userEmail,
         userName: userName,
         instituteName: instituteName,
+        eventName: eventName,
         userProfilePicUrl: userProfilePicUrl,
         dateTime: dateTime,
         eventDetails: eventDetails,
@@ -92,13 +96,14 @@ class FirestoreService extends ChangeNotifier {
       @required String userEmail,
       @required String userName,
       @required String instituteName,
+      @required String eventName,
       @required String userProfilePicUrl,
       @required DateTime dateTime,
       @required String eventDetails,
       @required String eventRules,
       @required String judgementCriteria}) async {
     CollectionReference feedsCollection = FirebaseFirestore.instance
-        .collection('events')
+        .collection('eventsCategories')
         .doc()
         .collection(userEmail);
     Map<String, dynamic> eventData = {

@@ -48,27 +48,28 @@ class FeedPage extends StatelessWidget {
                 stream: firestorFeedsData.snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Something went wrong'));
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return FeedsCard(
+                          name: snapshot.data.docs[index].data()['userName'],
+                          imageUrl:
+                              snapshot.data.docs[index].data()['imageUrl'],
+                          date: snapshot.data.docs[index].data()['dateTime'],
+                          description:
+                              snapshot.data.docs[index].data()['description'],
+                          userImageUrl: snapshot.data.docs[index]
+                              .data()['userProfilePic'],
+                        );
+                      },
+                    );
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: Text("Loading"));
                   }
-                  return ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return FeedsCard(
-                        name: snapshot.data.docs[index].data()['userName'],
-                        imageUrl: snapshot.data.docs[index].data()['imageUrl'],
-                        date: snapshot.data.docs[index].data()['dateTime'],
-                        description:
-                            snapshot.data.docs[index].data()['description'],
-                        userImageUrl:
-                            snapshot.data.docs[index].data()['userProfilePic'],
-                      );
-                    },
-                  );
+                  return Center(child: Text('Something went wrong'));
                 }),
           ),
         ],

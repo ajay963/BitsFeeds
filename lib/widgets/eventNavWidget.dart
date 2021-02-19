@@ -15,7 +15,8 @@ class EventNavWidget extends StatelessWidget {
         minWidth: 100,
         maxWidth: MediaQuery.of(context).size.width,
       ),
-      child: Center(child: EventNavMainFunctionOnly()),
+      child: Align(
+          alignment: Alignment.bottomCenter, child: EventNavMainFunctionOnly()),
       decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: [kWhiteBgColor.withOpacity(0), kWhiteBgColor],
@@ -30,8 +31,10 @@ class EventNavMainFunctionOnly extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentPage = Provider.of<EventNav>(context);
     return Container(
+      padding: EdgeInsets.only(bottom: 20),
       width: 100,
-      height: 30,
+      height: 50,
+      alignment: Alignment.bottomCenter,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:bits_news/component/constants.dart';
-import 'package:bits_news/screens/LoadingPage.dart';
+import 'package:bits_news/widgets/animations.dart';
 import 'package:bits_news/screens/signUp.dart';
 import 'package:bits_news/services/cloudServices.dart';
 import 'package:bits_news/services/firestoreService.dart';
@@ -90,7 +90,7 @@ class _AddPostState extends State<AddPost> {
           userProfilePicUrl: userProfilePicUrl,
           dateTime: dateTime,
           description: description);
-
+      await cloudStorage.cloudServiceVariableReset();
       Navigator.pop(context);
     }
 
@@ -134,7 +134,11 @@ class _AddPostState extends State<AddPost> {
                                   fontWeight: FontWeight.w400),
                             ),
                             GestureDetector(
-                              onTap: () => Navigator.pop(context),
+                              onTap: () async {
+                                await cloudStorage.cloudServiceVariableReset();
+
+                                Navigator.pop(context);
+                              },
                               child: Icon(FontAwesomeIcons.timesCircle,
                                   color: kBlackLessDark, size: 40),
                             )

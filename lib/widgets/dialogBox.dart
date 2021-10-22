@@ -23,10 +23,10 @@ class MssgDialog extends StatelessWidget {
             style:
                 TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 20)),
         actions: [
-          FlatButton(
+          RawMaterialButton(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Colors.white.withOpacity(0.2),
+              fillColor: Colors.white.withOpacity(0.2),
               onPressed: () => Navigator.pop(context),
               child: Container(
                 padding: EdgeInsets.all(5),

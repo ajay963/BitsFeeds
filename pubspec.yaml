@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -36,16 +36,16 @@ dependencies:
   provider: ^4.3.2+3
   flare_flutter: ^2.0.6
   font_awesome_flutter: ^8.10.0
-  table_calendar: ^2.3.3
+  flutter_feather_icons: ^1.0.3
   image_picker: ^0.6.7+21
   rive: ^0.6.2
   google_fonts: ^1.1.2
 
   # firebase pulgin only
   firebase_core: "0.7.0"
-  firebase_auth: "^0.20.0"
+  firebase_auth: "^0.20.1"
   google_sign_in: "^4.5.1"
-  cloud_firestore: "^0.16.0"
+  cloud_firestore: "^0.16.0+1"
   firebase_storage: "^7.0.0"
 
   
@@ -84,14 +84,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
-  #   - family: Roboto
-  #     fonts:
-  #       - asset: assets/fonts/Roboto-Regular.ttf
-  #       - asset: assets/fonts/Roboto-Bold.ttf
-  #       - asset: assets/fonts/Roboto-Black.ttf
-  #       - asset: assets/fonts/Roboto-Thin.ttf
-  #       - asset: assets/fonts/Roboto-Medium.ttf
-    
+ 
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

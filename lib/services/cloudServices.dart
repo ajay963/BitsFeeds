@@ -39,7 +39,6 @@ class CloudStorageService extends ChangeNotifier {
             print('IMage URL FRom main pass:$imageUrl');
             //  print('image URL from Main: $urlOfImage');
             notifyListeners();
-            _cloudServiceVariableReset();
 
             if (imageFileToUpload == null) imageFileToUpload.delete();
           });
@@ -78,7 +77,6 @@ class CloudStorageService extends ChangeNotifier {
             print('IMage URL FRom main pass:$imageUrl');
             //  print('image URL from Main: $urlOfImage');
             notifyListeners();
-            _cloudServiceVariableReset();
 
             if (imageFileToUpload == null) imageFileToUpload.delete();
           });
@@ -120,7 +118,6 @@ class CloudStorageService extends ChangeNotifier {
             if (imageFileToUpload == null) imageFileToUpload.delete();
 
             notifyListeners();
-            _cloudServiceVariableReset();
           });
         }
       });
@@ -131,7 +128,7 @@ class CloudStorageService extends ChangeNotifier {
     }
   }
 
-  _cloudServiceVariableReset() {
+  cloudServiceVariableReset() {
     isSucess = false;
     isUploading = false;
     notifyListeners();

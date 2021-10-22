@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:bits_news/component/constants.dart';
 import 'package:bits_news/component/theme.dart';
-import 'package:bits_news/screens/LoadingPage.dart';
+import 'package:bits_news/widgets/animations.dart';
 import 'package:bits_news/screens/signUp.dart';
 import 'package:bits_news/services/cloudServices.dart';
 import 'package:bits_news/services/firestoreService.dart';
@@ -43,9 +43,11 @@ class AddEvent extends StatefulWidget {
 }
 
 class _AddEventState extends State<AddEvent> {
-  final TextEditingController detailsController = TextEditingController();
-  final TextEditingController rulesController = TextEditingController();
-  final TextEditingController judgementController = TextEditingController();
+  final TextEditingController _detailsController = TextEditingController();
+  final TextEditingController _rulesController = TextEditingController();
+  final TextEditingController _judgementController = TextEditingController();
+  final TextEditingController _eventNameController = TextEditingController();
+
   final _eventDetailsFormKey = GlobalKey<FormState>();
 
   _selectDate(BuildContext context) async {
@@ -59,7 +61,7 @@ class _AddEventState extends State<AddEvent> {
       confirmText: 'Select',
       builder: (context, child) {
         return Theme(
-          data: CustomTheme1.calenderTheme(context),
+          data: CustomTheme.calenderTheme(context),
           child: child,
         );
       },
@@ -89,9 +91,9 @@ class _AddEventState extends State<AddEvent> {
 
   @override
   void dispose() {
-    detailsController.dispose();
-    rulesController.dispose();
-    judgementController.dispose();
+    _detailsController.dispose();
+    _rulesController.dispose();
+    _judgementController.dispose();
 
     // _imageFile.delete();
     super.dispose();
@@ -106,24 +108,30 @@ class _AddEventState extends State<AddEvent> {
     print('data from snapshot ${userData.email}');
     print('data from snapshot ${userData.uid}');
 
-    addPostData(
-        {String imageUrl,
-        String userEmail,
-        String userName,
-        String userProfilePicUrl,
-        DateTime dateTime,
-        String description}) async {
+    addEventsData({
+      @required String imageUrl,
+      @required String userEmail,
+      @required String userName,
+      @required String userProfilePicUrl,
+      @required DateTime dateTime,
+      @required String instituteName,
+      @required String eventName,
+      @required String eventDetails,
+      @required String eventRules,
+      @required String judgementCriteria,
+    }) async {
       await fireStore.addEvent(
           imageUrl: imageUrl,
           userEmail: userEmail,
           userName: userName,
-          instituteName: null,
+          instituteName: instituteName,
+          eventName: eventName,
           userProfilePicUrl: userProfilePicUrl,
           dateTime: dateTime,
-          eventDetails: null,
-          eventRules: null,
-          judgementCriteria: null);
-
+          eventDetails: eventDetails,
+          eventRules: eventRules,
+          judgementCriteria: judgementCriteria);
+      await cloudStorage.cloudServiceVariableReset();
       Navigator.pop(context);
     }
 
@@ -169,7 +177,12 @@ class _AddEventState extends State<AddEvent> {
                                     fontWeight: FontWeight.w400),
                               ),
                               GestureDetector(
-                                onTap: () => Navigator.pop(context),
+                                onTap: () async {
+                                  await cloudStorage
+                                      .cloudServiceVariableReset();
+
+                                  Navigator.pop(context);
+                                },
                                 child: Icon(FontAwesomeIcons.timesCircle,
                                     color: kBlackLessDark, size: 40),
                               )
@@ -189,59 +202,85 @@ class _AddEventState extends State<AddEvent> {
                         ),
                         SizedBox(height: 20),
                         FeedsCard(
-                            onSelectDateButtonTrigrred: () async =>
-                                _selectDate(context),
-                            onAddPhotoButtonTrigrred: () => getImage(),
-                            onUploadButtonTrigrred: () async {
-                              if (_imageFile == null) {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => MssgDialog(
-                                        title: 'Error',
-                                        mssg: 'PLaese add photo',
-                                        context: context));
-                              } else if (await _imageFile.length() >
-                                  1024 * 700) {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => MssgDialog(
-                                        title: 'Size Exceed',
-                                        mssg:
-                                            'Please select a file less than 1 MB',
-                                        context: context));
-                              } else if (await _imageFile.exists()) {
-                                print('upload starte');
-                                await cloudStorage.feedsImageUpload(
-                                    imageFileToUpload: _imageFile);
-                                print('upload end');
-                              }
-                            },
-                            onPostButtonTrigrred: () {
-                              if (_eventDetailsFormKey.currentState
-                                  .validate()) {
-                                addPostData(
-                                  userEmail: userData.email,
-                                  dateTime: selectedDate,
-                                  imageUrl: cloudStorage.imageUrl,
-                                  // description: descriptionController.text,
-                                  userName:
-                                      snapshot.data.docs[0].data()['clubName'],
-                                  userProfilePicUrl:
-                                      snapshot.data.docs[0].data()['imageUrl'],
-                                );
-                              }
-                            },
-                            postImageFile: _imageFile,
-                            date: selectedDate,
-                            name: snapshot.data.docs[0].data()['clubName'],
-                            imageUrl: snapshot.data.docs[0].data()['imageUrl']),
+                          onSelectDateButtonTrigrred: () async =>
+                              _selectDate(context),
+                          onAddPhotoButtonTrigrred: () => getImage(),
+                          onUploadButtonTrigrred: () async {
+                            if (_imageFile == null) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => MssgDialog(
+                                      title: 'Error',
+                                      mssg: 'PLaese add photo',
+                                      context: context));
+                            } else if (await _imageFile.length() > 1024 * 700) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => MssgDialog(
+                                      title: 'Size Exceed',
+                                      mssg:
+                                          'Please select a file less than 1 MB',
+                                      context: context));
+                            } else if (await _imageFile.exists()) {
+                              await cloudStorage.eventsImageUpload(
+                                  imageFileToUpload: _imageFile);
+                            }
+                          },
+                          onPostButtonTrigrred: () {
+                            if (_eventDetailsFormKey.currentState.validate()) {
+                              (selectedDate != null)
+                                  ? addEventsData(
+                                      userEmail: userData.email,
+                                      dateTime: selectedDate,
+                                      imageUrl: cloudStorage.imageUrl,
+                                      eventName:
+                                          _eventNameController.text.trim(),
+                                      userName: snapshot.data.docs[0]
+                                          .data()['clubName'],
+                                      userProfilePicUrl: snapshot.data.docs[0]
+                                          .data()['imageUrl'],
+                                      instituteName: snapshot.data.docs[0]
+                                          .data()['instituteName'],
+                                      eventDetails:
+                                          _detailsController.text.trim(),
+                                      eventRules: _rulesController.text.trim(),
+                                      judgementCriteria:
+                                          _judgementController.text.trim(),
+                                    )
+                                  : showDialog(
+                                      context: context,
+                                      builder: (context) => MssgDialog(
+                                          title: 'Error',
+                                          mssg: 'Please Select date',
+                                          context: context));
+                            }
+                          },
+                          postImageFile: _imageFile,
+                          date: selectedDate,
+                          name: snapshot.data.docs[0].data()['clubName'],
+                          imageUrl: snapshot.data.docs[0].data()['imageUrl'],
+                        ),
                         SizedBox(height: 20),
+                        (cloudStorage.isSucess == true)
+                            ? BorderedColoredTextField(
+                                fieldName: 'Event Name',
+                                color: kPkThemeShade1,
+                                maxLines: 1,
+                                controller: _eventNameController,
+                                validator: (value) {
+                                  if (value.isEmpty)
+                                    return 'Event Name is missing';
+                                  else
+                                    return null;
+                                },
+                              )
+                            : SizedBox(),
                         (cloudStorage.isSucess == true)
                             ? BorderedColoredTextField(
                                 fieldName: 'Event Details',
                                 color: kPkThemeShade1,
                                 maxLines: 5,
-                                controller: detailsController,
+                                controller: _detailsController,
                                 validator: (value) {
                                   if (value.isEmpty)
                                     return 'Event Details is empty';
@@ -255,7 +294,7 @@ class _AddEventState extends State<AddEvent> {
                                 fieldName: 'Rules',
                                 color: kPkThemeShade1,
                                 maxLines: 5,
-                                controller: rulesController,
+                                controller: _rulesController,
                                 validator: (value) {
                                   if (value.isEmpty)
                                     return 'Rules is missing';
@@ -269,7 +308,7 @@ class _AddEventState extends State<AddEvent> {
                                 fieldName: 'Judgement Criteria',
                                 color: kPkThemeShade1,
                                 maxLines: 5,
-                                controller: judgementController,
+                                controller: _judgementController,
                                 validator: (value) {
                                   if (value.isEmpty)
                                     return 'Judgement criteria is missing';
@@ -357,23 +396,21 @@ class FeedsCard extends StatelessWidget {
                   ),
                 )
               : SizedBox(),
-          (cloudStorage.isSucess == false)
-              ? Container(
-                  margin: EdgeInsets.only(left: 15, top: 15),
-                  child: FlatGradientButton(
-                    ontap: onSelectDateButtonTrigrred,
-                    width: 170,
-                    child: Text(
-                      'Select Date',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: kBlackLessDark,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                )
-              : SizedBox(),
+          Container(
+            margin: EdgeInsets.only(left: 15, top: 15),
+            child: FlatGradientButton(
+              ontap: onSelectDateButtonTrigrred,
+              width: 170,
+              child: Text(
+                'Select Date',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    color: kBlackLessDark,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          ),
           (cloudStorage.isSucess == false)
               ? Container(
                   margin: EdgeInsets.only(left: 15, top: 15),

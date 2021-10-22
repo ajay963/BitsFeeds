@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:bits_news/Provider/styles.dart';
-import 'package:bits_news/screens/signUp.dart';
 import 'package:bits_news/widgets/glassMorphism.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -138,8 +137,8 @@ class _SomeThingsState extends State<SomeThings> {
             ),
           ),
           FlatGlassButton(
-            ontap: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SignUpPage())),
+            ontap: () {}, //Navigator.push(
+            // context, MaterialPageRoute(builder: (context) => SignUpPage())),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -182,10 +181,10 @@ class MssgDialog extends StatelessWidget {
             style:
                 TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 20)),
         actions: [
-          FlatButton(
+          RawMaterialButton(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
-              color: Colors.white.withOpacity(0.2),
+              fillColor: Colors.white.withOpacity(0.2),
               onPressed: () => Navigator.pop(context),
               child: Container(
                 padding: EdgeInsets.all(5),

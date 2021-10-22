@@ -61,7 +61,7 @@ class _AddEventState extends State<AddEvent> {
       confirmText: 'Select',
       builder: (context, child) {
         return Theme(
-          data: CustomTheme1.calenderTheme(context),
+          data: CustomTheme.calenderTheme(context),
           child: child,
         );
       },
@@ -202,66 +202,64 @@ class _AddEventState extends State<AddEvent> {
                         ),
                         SizedBox(height: 20),
                         FeedsCard(
-                            onSelectDateButtonTrigrred: () async =>
-                                _selectDate(context),
-                            onAddPhotoButtonTrigrred: () => getImage(),
-                            onUploadButtonTrigrred: () async {
-                              if (_imageFile == null) {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => MssgDialog(
-                                        title: 'Error',
-                                        mssg: 'PLaese add photo',
-                                        context: context));
-                              } else if (await _imageFile.length() >
-                                  1024 * 700) {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => MssgDialog(
-                                        title: 'Size Exceed',
-                                        mssg:
-                                            'Please select a file less than 1 MB',
-                                        context: context));
-                              } else if (await _imageFile.exists()) {
-                                await cloudStorage.eventsImageUpload(
-                                    imageFileToUpload: _imageFile);
-                              }
-                            },
-                            onPostButtonTrigrred: () {
-                              if (_eventDetailsFormKey.currentState
-                                  .validate()) {
-                                (selectedDate != null)
-                                    ? addEventsData(
-                                        userEmail: userData.email,
-                                        dateTime: selectedDate,
-                                        imageUrl: cloudStorage.imageUrl,
-                                        eventName:
-                                            _eventNameController.text.trim(),
-                                        userName: snapshot.data.docs[0]
-                                            .data()['clubName'],
-                                        userProfilePicUrl: snapshot.data.docs[0]
-                                            .data()['imageUrl'],
-                                        instituteName: snapshot.data.docs[0]
-                                            .data()['instituteName'],
-                                        eventDetails:
-                                            _detailsController.text.trim(),
-                                        eventRules:
-                                            _rulesController.text.trim(),
-                                        judgementCriteria:
-                                            _judgementController.text.trim(),
-                                      )
-                                    : showDialog(
-                                        context: context,
-                                        builder: (context) => MssgDialog(
-                                            title: 'Error',
-                                            mssg: 'Please Select date',
-                                            context: context));
-                              }
-                            },
-                            postImageFile: _imageFile,
-                            date: selectedDate,
-                            name: snapshot.data.docs[0].data()['clubName'],
-                            imageUrl: snapshot.data.docs[0].data()['imageUrl']),
+                          onSelectDateButtonTrigrred: () async =>
+                              _selectDate(context),
+                          onAddPhotoButtonTrigrred: () => getImage(),
+                          onUploadButtonTrigrred: () async {
+                            if (_imageFile == null) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => MssgDialog(
+                                      title: 'Error',
+                                      mssg: 'PLaese add photo',
+                                      context: context));
+                            } else if (await _imageFile.length() > 1024 * 700) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => MssgDialog(
+                                      title: 'Size Exceed',
+                                      mssg:
+                                          'Please select a file less than 1 MB',
+                                      context: context));
+                            } else if (await _imageFile.exists()) {
+                              await cloudStorage.eventsImageUpload(
+                                  imageFileToUpload: _imageFile);
+                            }
+                          },
+                          onPostButtonTrigrred: () {
+                            if (_eventDetailsFormKey.currentState.validate()) {
+                              (selectedDate != null)
+                                  ? addEventsData(
+                                      userEmail: userData.email,
+                                      dateTime: selectedDate,
+                                      imageUrl: cloudStorage.imageUrl,
+                                      eventName:
+                                          _eventNameController.text.trim(),
+                                      userName: snapshot.data.docs[0]
+                                          .data()['clubName'],
+                                      userProfilePicUrl: snapshot.data.docs[0]
+                                          .data()['imageUrl'],
+                                      instituteName: snapshot.data.docs[0]
+                                          .data()['instituteName'],
+                                      eventDetails:
+                                          _detailsController.text.trim(),
+                                      eventRules: _rulesController.text.trim(),
+                                      judgementCriteria:
+                                          _judgementController.text.trim(),
+                                    )
+                                  : showDialog(
+                                      context: context,
+                                      builder: (context) => MssgDialog(
+                                          title: 'Error',
+                                          mssg: 'Please Select date',
+                                          context: context));
+                            }
+                          },
+                          postImageFile: _imageFile,
+                          date: selectedDate,
+                          name: snapshot.data.docs[0].data()['clubName'],
+                          imageUrl: snapshot.data.docs[0].data()['imageUrl'],
+                        ),
                         SizedBox(height: 20),
                         (cloudStorage.isSucess == true)
                             ? BorderedColoredTextField(

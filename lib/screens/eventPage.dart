@@ -2,6 +2,7 @@ import 'package:bits_news/Provider/eventNav.dart';
 import 'package:bits_news/widgets/eventNavWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:bits_news/component/constants.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -17,9 +18,7 @@ class EventMainPage extends StatelessWidget {
   final String eventDetails;
   final String eventRules;
   final String judgementCriteria;
-  final PageController _pageController = PageController(
-    initialPage: 0,
-  );
+
   EventMainPage(
       {@required this.eventName,
       @required this.dateTime,
@@ -34,7 +33,44 @@ class EventMainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final eventPage = Provider.of<EventNav>(context);
+    final PageController _pageController = PageController(
+      initialPage: eventPage.eventCurrentPage,
+    );
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        toolbarHeight: 80,
+        automaticallyImplyLeading: false,
+        titleSpacing: 30,
+        title: Text(
+          'Event Page',
+          style: TextStyle(
+              fontFamily: GoogleFonts.itim().fontFamily,
+              color: kBlackLessDark,
+              fontSize: 38),
+        ),
+        actions: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            clipBehavior: Clip.hardEdge,
+            child: InkWell(
+                splashColor: Colors.red,
+                onTap: () {
+                  eventPage.setEventPAge(setPageNo: 0);
+                  Navigator.pop(context);
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: 30),
+                  child: Icon(
+                    FontAwesomeIcons.timesCircle,
+                    color: kBlackDark,
+                    size: 38,
+                  ),
+                )),
+          )
+        ],
+      ),
       backgroundColor: kWhiteBgColor,
       body: Stack(children: [
         SafeArea(
@@ -93,15 +129,17 @@ class EventDetails extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
+        // mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 20),
-          Center(
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
             child: Image(
               image: NetworkImage(imageUrl),
               height: MediaQuery.of(context).size.width - 100,
               width: MediaQuery.of(context).size.width - 50,
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.cover,
             ),
           ),
           SizedBox(height: 30),

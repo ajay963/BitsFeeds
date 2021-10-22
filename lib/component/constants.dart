@@ -10,6 +10,21 @@ const Color kPkThemeShade1 = Color(0xffff5e78);
 const Color kLYThemeShade1 = Color(0xfff9f871);
 const Color kDYThemeShade1 = Color(0xffffc75f);
 const Color kMVThemeShade1 = Color(0xff845ec2);
+
+//instagram light theme color
+const Color kBGLightModeTheme = Color(0xffF7F8FA);
+const Color kShadowLightModeTheme = Color(0xffDEE6ED);
+const Color kDarkTextLightModeTheme = Color(0xff121212);
+const Color kLightTextLightModeTheme = Color(0xff76777E);
+const Color kBoxColorLightModeTheme = Color(0xffFFFFFF);
+
+//instagram light theme color
+const Color kBGDarkModeTheme = Color(0xffF7F8FA);
+const Color kShadowDarkModeTheme = Color(0x00111111);
+const Color kDarkTextDarkModeTheme = Color(0xff76777E);
+const Color kLightTextDarkModeTheme = Color(0xffEEEEEE);
+const Color kBoxColorDarkModeTheme = Color(0xff1B1B1B);
+
 const Gradient kThemeGradient = LinearGradient(
     colors: [kLYThemeShade1, kDYThemeShade1],
     begin: Alignment.topLeft,

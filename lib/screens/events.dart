@@ -17,7 +17,7 @@ class EventPage extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 30),
+          SizedBox(height: 20),
           Padding(
             padding: EdgeInsets.only(left: 30),
             child: RichText(
@@ -28,16 +28,10 @@ class EventPage extends StatelessWidget {
                   children: [
                     TextSpan(
                         text: 'Events\n',
-                        style: TextStyle(
-                            fontSize: 48,
-                            fontWeight: FontWeight.w400,
-                            color: kPkThemeShade1)),
+                        style: Theme.of(context).textTheme.headline1),
                     TextSpan(
                         text: 'Track all the events',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: kBlackLessDark,
-                            fontWeight: FontWeight.bold))
+                        style: Theme.of(context).textTheme.headline2)
                   ]),
             ),
           ),
@@ -51,6 +45,7 @@ class EventPage extends StatelessWidget {
                     return ListView.builder(
                       physics: BouncingScrollPhysics(),
                       itemCount: snapshot.data.docs.length,
+                      padding: EdgeInsets.symmetric(vertical: 20),
                       itemBuilder: (BuildContext context, int index) {
                         return EventInfoCard(
                           eventName:
@@ -131,7 +126,7 @@ class EventInfoCard extends StatelessWidget {
                     userProfilePicUrl: userProfilePicUrl,
                   ))),
       child: Container(
-        margin: EdgeInsets.only(left: 20, right: 30),
+        margin: EdgeInsets.only(left: 20, right: 30, top: 10),
         height: 120,
         width: MediaQuery.of(context).size.width - 70,
         child: Stack(
@@ -141,7 +136,7 @@ class EventInfoCard extends StatelessWidget {
               child: Image(
                 height: 120,
                 width: MediaQuery.of(context).size.width - 50,
-                image: AssetImage('assets/png/2.jpg'),
+                image: NetworkImage(imageUrl),
                 fit: BoxFit.cover,
               ),
             ),

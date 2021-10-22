@@ -71,6 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     final cloudService = Provider.of<CloudStorageService>(context);
+
     signUpCollection(
         {String clubName,
         String instituteName,
@@ -229,7 +230,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                                 .trim(),
                                             userId: userId.uid);
                                         imageFile.delete();
-
+                                        cloudService
+                                            .cloudServiceVariableReset();
                                         Navigator.pop(context);
                                       }
                                     } else {
@@ -271,8 +273,15 @@ class _SignUpPageState extends State<SignUpPage> {
                           (cloudService.isSucess == false)
                               ? RaisedWhiteButton(
                                   ontap: () async {
-                                    await cloudService.clubImageUpload(
-                                        imageFileToUpload: imageFile);
+                                    (imageFile != null)
+                                        ? await cloudService.clubImageUpload(
+                                            imageFileToUpload: imageFile)
+                                        : showDialog(
+                                            context: context,
+                                            builder: (context) => MssgDialog(
+                                                title: 'Error',
+                                                mssg: 'Please Select an Image',
+                                                context: context));
                                   },
                                   child: Text('Upload',
                                       style: TextStyle(
@@ -310,10 +319,10 @@ class MssgDialog extends StatelessWidget {
       content:
           Text(mssg, style: TextStyle(color: kBlackLessDark, fontSize: 20)),
       actions: [
-        FlatButton(
+        RawMaterialButton(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: korgShade3,
+            fillColor: korgShade3,
             onPressed: () => Navigator.pop(context),
             child: Container(
               padding: EdgeInsets.all(5),

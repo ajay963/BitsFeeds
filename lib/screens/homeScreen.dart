@@ -30,7 +30,7 @@ class Home extends StatelessWidget {
     //  final styleAndControl = Provider.of<Styles>(context);
     return Scaffold(
         extendBody: true,
-        backgroundColor: kWhiteBgColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         // bottomNavigationBar: NavBar(
         //   pageController: _pageController,
         // ),

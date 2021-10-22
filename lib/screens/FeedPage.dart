@@ -1,59 +1,55 @@
 import 'dart:ui';
 import 'package:bits_news/component/constants.dart';
-// import 'package:bits_news/services/firestoreService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 // import 'package:provider/provider.dart';
 
 class FeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final User user = FirebaseAuth.instance.currentUser;
     // final firestore = Provider.of<FirestoreService>(context);
     final CollectionReference firestorFeedsData =
         FirebaseFirestore.instance.collection('feeds');
 
     return SafeArea(
-      child: Column(
-        children: [
-          SizedBox(height: 40),
-          Container(
-              margin: EdgeInsets.only(left: 30),
-              alignment: Alignment.topLeft,
-              child: RichText(
-                text: TextSpan(
-                    style: TextStyle(
-                      fontFamily: GoogleFonts.itim().fontFamily,
-                    ),
-                    children: [
-                      TextSpan(
-                          text: 'Discover\n',
-                          style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.w400,
-                              color: kPkThemeShade1)),
-                      TextSpan(
-                          text: 'Get youself updated',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: kBlackLessDark,
-                              fontWeight: FontWeight.bold))
-                    ]),
-              )),
-          SizedBox(height: 20),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            Container(
+                margin: EdgeInsets.only(left: 30),
+                alignment: Alignment.topLeft,
+                child: RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: (user.displayName == null)
+                            ? 'Discover\n'
+                            : 'Hi ' + user.displayName + '\n',
+                        style: Theme.of(context).textTheme.headline1),
+                    TextSpan(
+                        text: 'Get youself updated',
+                        style: Theme.of(context).textTheme.headline2)
+                  ]),
+                )),
+            SizedBox(height: 20),
+            StreamBuilder<QuerySnapshot>(
                 stream: firestorFeedsData.snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
+                      shrinkWrap: true,
                       physics: BouncingScrollPhysics(),
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (BuildContext context, int index) {
                         return FeedsCard(
+                          docID: snapshot.data.docs[index].id,
                           name: snapshot.data.docs[index].data()['userName'],
                           imageUrl:
                               snapshot.data.docs[index].data()['imageUrl'],
@@ -71,8 +67,8 @@ class FeedPage extends StatelessWidget {
                   }
                   return Center(child: Text('Something went wrong'));
                 }),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -84,14 +80,15 @@ class FeedsCard extends StatelessWidget {
   final String imageUrl;
   final String userImageUrl;
   final String description;
-
-  final double borderRadius = 5;
+  final String docID;
+  final double borderRadius = 10;
 
   FeedsCard(
       {@required this.name,
       @required this.imageUrl,
       @required this.date,
       @required this.description,
+      @required this.docID,
       @required this.userImageUrl});
   @override
   Widget build(BuildContext context) {
@@ -114,6 +111,8 @@ class FeedsCard extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 10),
+          LikeAndShare(likes: 144),
           FeedsTextCard(
             name: name,
             imageUrl: imageUrl,
@@ -126,11 +125,7 @@ class FeedsCard extends StatelessWidget {
             child: Text(
               description,
               maxLines: 3,
-              style: TextStyle(
-                  fontFamily: GoogleFonts.delius().fontFamily,
-                  color: kBlackLessDark,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w300),
+              style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
           Padding(
@@ -138,22 +133,22 @@ class FeedsCard extends StatelessWidget {
             child: Text(
               'Read More',
               style: TextStyle(
-                  color: kPkThemeShade1,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                color: kPkThemeShade1,
+                fontSize: 20,
+              ),
             ),
           ),
           SizedBox(height: 10)
         ],
       ),
       decoration: BoxDecoration(
-          color: kWhiteBgColor,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(borderRadius),
           boxShadow: [
             BoxShadow(
-                color: kGreyDark.withOpacity(1),
-                offset: Offset(0, 0),
-                blurRadius: 12)
+                color: Theme.of(context).shadowColor,
+                offset: Offset(0, 10),
+                blurRadius: 20)
           ]),
     );
   }
@@ -194,25 +189,56 @@ class FeedsTextCard extends StatelessWidget {
                       text: TextSpan(children: [
                         TextSpan(
                             text: (name.isEmpty) ? 'Name\n' : name + '\n',
-                            style: TextStyle(
-                                fontFamily: GoogleFonts.itim().fontFamily,
-                                fontSize: 20,
-                                color: kBlackLessDark,
-                                fontWeight: FontWeight.bold)),
+                            style: Theme.of(context).textTheme.bodyText2),
                         TextSpan(
                             text: DateFormat.yMMMd()
                                 .format(date.toDate())
                                 .toString(),
-                            style: TextStyle(
-                                fontFamily: GoogleFonts.itim().fontFamily,
-                                fontSize: 18,
-                                color: kBlackLessDark,
-                                fontWeight: FontWeight.w600)),
+                            style: Theme.of(context).textTheme.bodyText2),
                       ])),
                 )
               ],
             ),
           ]),
+    );
+  }
+}
+
+class LikeAndShare extends StatelessWidget {
+  final int likes;
+  LikeAndShare({@required this.likes});
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(width: 10),
+        Icon(
+          FontAwesomeIcons.solidHeart,
+          size: 34,
+          color: kPkThemeShade1,
+        ),
+        SizedBox(width: 10),
+        Text(
+          '$likes Likes',
+          style: TextStyle(
+              color: Theme.of(context).textTheme.headline1.color,
+              fontSize: 20,
+              fontFamily: Theme.of(context).textTheme.headline1.fontFamily),
+        ),
+        SizedBox(width: 30),
+        Icon(FontAwesomeIcons.telegramPlane,
+            size: 34, color: Theme.of(context).iconTheme.color),
+        SizedBox(width: 10),
+        Text(
+          'Share',
+          style: TextStyle(
+              color: Theme.of(context).textTheme.headline1.color,
+              fontSize: 20,
+              fontFamily: Theme.of(context).textTheme.headline1.fontFamily),
+        )
+      ],
     );
   }
 }

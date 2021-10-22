@@ -6,8 +6,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ClubPass extends StatelessWidget {
+  final String email;
+  final String instituteName;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-
+  ClubPass({@required this.email, @required this.instituteName});
   @override
   Widget build(BuildContext context) {
     final User userData = firebaseAuth.currentUser;
@@ -15,6 +17,10 @@ class ClubPass extends StatelessWidget {
         .collection('club')
         .doc(userData.uid)
         .collection(userData.email);
+    // final CollectionReference clubData = FirebaseFirestore.instance
+    // .collection('club')
+    // .doc(instituteName)
+    // .collection(email);
     return StreamBuilder(
         stream: clubData.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

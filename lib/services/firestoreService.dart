@@ -130,8 +130,9 @@ class FirestoreService extends ChangeNotifier {
       @required String userId}) async {
     CollectionReference clubsCollection = FirebaseFirestore.instance
         .collection('club')
-        .doc(userId)
+        .doc(instituteName)
         .collection(email);
+
     Map<String, dynamic> clubData = {
       'clubName': clubName,
       'instituteName': instituteName,
@@ -141,5 +142,41 @@ class FirestoreService extends ChangeNotifier {
       'email': email
     };
     await clubsCollection.add(clubData);
+  }
+
+  Future<Stream<List<String>>> getListOfUserIdFromFeeds(
+      {@required docID}) async {
+    CollectionReference feedsCollection =
+        FirebaseFirestore.instance.collection('feeds');
+    return feedsCollection.doc(docID).snapshots().map((userIdLists) {
+      if (!userIdLists.exists) {
+        return [];
+      }
+      return userIdLists.data()['userIdList'] as List<String>;
+    });
+  }
+
+  Future<bool> likeFunction(
+      {@required String postID, @required String userId}) async {
+    bool _isLiked = false;
+    List<String> listOfUser = [];
+    CollectionReference postRefrence =
+        FirebaseFirestore.instance.collection('feeds');
+    Future<DocumentSnapshot> docSnapshot =
+        FirebaseFirestore.instance.collection('feeds').doc(postID).get();
+
+    DocumentSnapshot doc = await docSnapshot;
+    listOfUser = doc.data()['ListOfUsers'] as List<String>;
+    if (listOfUser.contains(userId)) {
+      _isLiked = false;
+
+      listOfUser.remove(userId);
+      await postRefrence.doc(postID).update({'listOfUser': listOfUser});
+    } else {
+      _isLiked = true;
+      listOfUser.add(userId);
+      await postRefrence.doc(postID).update({'listOfUser': listOfUser});
+    }
+    return _isLiked;
   }
 }
